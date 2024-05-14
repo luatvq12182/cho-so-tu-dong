@@ -146,59 +146,70 @@ const LoaiSoiCau = () => {
                         </Button>
                     </div>
 
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Tên</th>
-                                <th>Loại</th>
-                                <th>Kiểu tạo số</th>
-                                <th>Số lượng số (cặp) tạo ra</th>
-                                <th>Số ngày soi cầu</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loaiSoiCau.map((e, i) => {
-                                return (
-                                    <tr key={e.value}>
-                                        <td>{i + 1}</td>
-                                        <td>{e.name}</td>
-                                        <td>{PRIZE_LABELS[e.prize]}</td>
-                                        <td>
-                                            {NUMBER_TYPE_LABELS[e.numberType]}
-                                        </td>
-                                        <td className="text-center">
-                                            {e.quantity}
-                                        </td>
-                                        <td className="text-center">
-                                            {e.numberOfDays}
-                                        </td>
-                                        <td>
-                                            <Button
-                                                onClick={() => {
-                                                    handleEdit(e);
-                                                }}
-                                                color="success me-2"
-                                            >
-                                                Sửa
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    handleDeleteLoaiSoiCau(
-                                                        e._id
-                                                    );
-                                                }}
-                                                color="danger"
-                                            >
-                                                Xoá
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </Table>
+                    <div
+                        style={{
+                            maxHeight: "calc(100vh - 100px)",
+                            overflow: "auto",
+                        }}
+                    >
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Loại</th>
+                                    <th>Kiểu tạo số</th>
+                                    <th>Số lượng số (cặp) tạo ra</th>
+                                    <th>Số ngày soi cầu</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loaiSoiCau.map((e, i) => {
+                                    return (
+                                        <tr key={e.value}>
+                                            <td>{i + 1}</td>
+                                            <td>{e.name}</td>
+                                            <td>{PRIZE_LABELS[e.prize]}</td>
+                                            <td>
+                                                {
+                                                    NUMBER_TYPE_LABELS[
+                                                        e.numberType
+                                                    ]
+                                                }
+                                            </td>
+                                            <td className="text-center">
+                                                {e.quantity}
+                                            </td>
+                                            <td className="text-center">
+                                                {e.numberOfDays}
+                                            </td>
+                                            <td>
+                                                <Button
+                                                    onClick={() => {
+                                                        handleEdit(e);
+                                                    }}
+                                                    color="success me-2"
+                                                >
+                                                    Sửa
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        handleDeleteLoaiSoiCau(
+                                                            e._id
+                                                        );
+                                                    }}
+                                                    color="danger"
+                                                >
+                                                    Xoá
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </Table>
+                    </div>
                 </CardBody>
             </Card>
         </div>
