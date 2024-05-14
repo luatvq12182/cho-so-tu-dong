@@ -11,7 +11,7 @@ import {
     ModalHeader,
 } from "reactstrap";
 import { randomNumber } from "../utils";
-import { NUMBER_TYPE } from "../constants";
+import { NUMBER_TYPE, PRIZE } from "../constants";
 
 const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
     const [testRandomNums, setTestRandomNums] = useState([]);
@@ -23,8 +23,8 @@ const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
         } else {
             setFormData({
                 name: "",
-                prize: 0,
-                numberType: 0,
+                prize: PRIZE.LO,
+                numberType: NUMBER_TYPE.SO_NGAU_NHIEN_0_TO_99,
                 quantity: 1,
                 numberOfDays: 1,
             });
@@ -33,11 +33,11 @@ const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
 
     const prizeOptions = [
         {
-            value: 0,
+            value: PRIZE.LO,
             label: "Lô",
         },
         {
-            value: 1,
+            value: PRIZE.DE,
             label: "Đề",
         },
     ];
@@ -146,7 +146,7 @@ const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
         ];
 
         for (let i = 0; i < fields.length; i++) {
-            if (!formData[fields[i]]?.trim()) {
+            if (!formData[fields[i]]) {
                 window.alert("Vui lòng nhập đủ các trường thông tin");
                 return;
             }

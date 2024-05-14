@@ -35,7 +35,7 @@ const ModalDomain = ({ open, toggle, data, onSubmit }) => {
         const fields = ["name"];
 
         for (let i = 0; i < fields.length; i++) {
-            if (!formData[fields[i]]?.trim()) {
+            if (!formData[fields[i]]) {
                 window.alert("Vui lòng nhập đủ các trường thông tin");
                 return;
             }
