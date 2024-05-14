@@ -148,7 +148,7 @@ const LoaiSoiCau = () => {
 
                     <div
                         style={{
-                            maxHeight: "calc(100vh - 100px)",
+                            maxHeight: "calc(100vh - 200px)",
                             overflow: "auto",
                         }}
                     >
