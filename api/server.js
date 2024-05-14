@@ -72,7 +72,7 @@ app.post("/api/verify-token", (req, res) => {
     });
 });
 
-app.use((req, res, next) => {
+const authenticateToken = (req, res, next) => {
     const token = req.headers["authorization"];
 
     if (!token) {
@@ -86,14 +86,14 @@ app.use((req, res, next) => {
         req.user = user;
         next();
     });
-});
+};
 
-app.get("/api/loaiSoiCau", LoaiSoiCauController.getLoaiSoiCaus);
-app.post("/api/loaiSoiCau", LoaiSoiCauController.createLoaiSoiCau);
-app.put("/api/loaiSoiCau", LoaiSoiCauController.updateLoaiSoiCau);
-app.delete("/api/loaiSoiCau/:id", LoaiSoiCauController.deleteLoaiSoiCau);
+app.get("/api/loaiSoiCau", authenticateToken, LoaiSoiCauController.getLoaiSoiCaus);
+app.post("/api/loaiSoiCau", authenticateToken, LoaiSoiCauController.createLoaiSoiCau);
+app.put("/api/loaiSoiCau", authenticateToken, LoaiSoiCauController.updateLoaiSoiCau);
+app.delete("/api/loaiSoiCau/:id", authenticateToken, LoaiSoiCauController.deleteLoaiSoiCau);
 
-app.get("/api/domains", DomainController.getDomains);
-app.post("/api/domains", DomainController.createDomain);
-app.put("/api/domains", DomainController.updateDomain);
-app.delete("/api/domains/:id", DomainController.deleteDomain);
+app.get("/api/domains", authenticateToken, DomainController.getDomains);
+app.post("/api/domains", authenticateToken, DomainController.createDomain);
+app.put("/api/domains", authenticateToken, DomainController.updateDomain);
+app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain);
