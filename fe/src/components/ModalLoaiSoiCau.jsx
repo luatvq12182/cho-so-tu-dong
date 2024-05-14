@@ -158,7 +158,7 @@ const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
     return (
         <Modal size="lg" isOpen={open} toggle={toggle}>
             <ModalHeader toggle={toggle}>
-                {data ? "Sửa" : "Thêm mới"}
+                {data._id ? "Sửa" : "Thêm mới"}
             </ModalHeader>
             <ModalBody>
                 <FormGroup>

@@ -7,11 +7,22 @@ import {
     updateLoaiSoiCau,
     deleteLoaiSoiCau,
 } from "../services";
-import { NUMBER_TYPE_LABELS, PRIZE_LABELS } from "../constants";
+import {
+    NUMBER_TYPE,
+    NUMBER_TYPE_LABELS,
+    PRIZE,
+    PRIZE_LABELS,
+} from "../constants";
 
 const LoaiSoiCau = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [dataEdit, setDataEdit] = useState(null);
+    const [dataEdit, setDataEdit] = useState({
+        name: "",
+        prize: PRIZE.LO,
+        numberType: NUMBER_TYPE.SO_NGAU_NHIEN_0_TO_99,
+        quantity: 1,
+        numberOfDays: 1,
+    });
     const [loaiSoiCau, setLoaiSoiCau] = useState([]);
 
     useEffect(() => {
@@ -119,7 +130,14 @@ const LoaiSoiCau = () => {
                     <div className="mb-2">
                         <Button
                             onClick={() => {
-                                setDataEdit(null);
+                                setDataEdit({
+                                    name: "",
+                                    prize: PRIZE.LO,
+                                    numberType:
+                                        NUMBER_TYPE.SO_NGAU_NHIEN_0_TO_99,
+                                    quantity: 1,
+                                    numberOfDays: 1,
+                                });
                                 toggle();
                             }}
                             color="primary"
@@ -150,8 +168,12 @@ const LoaiSoiCau = () => {
                                         <td>
                                             {NUMBER_TYPE_LABELS[e.numberType]}
                                         </td>
-                                        <td>{e.quantity}</td>
-                                        <td>{e.numberOfDays}</td>
+                                        <td className="text-center">
+                                            {e.quantity}
+                                        </td>
+                                        <td className="text-center">
+                                            {e.numberOfDays}
+                                        </td>
                                         <td>
                                             <Button
                                                 onClick={() => {
