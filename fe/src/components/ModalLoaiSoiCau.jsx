@@ -31,6 +31,10 @@ const ModalLoaiSoiCau = ({ open, toggle, data, onSubmit }) => {
         }
     }, [data]);
 
+    useEffect(() => {
+        setTestRandomNums([]);
+    }, [open]);
+
     const prizeOptions = [
         {
             value: PRIZE.LO,

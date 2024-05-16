@@ -23,8 +23,12 @@ const soHangNgaySchema = new Schema(
             default: [],
         },
         result: {
-            type: String,
-            default: "",
+            type: Array,
+            default: [],
+        },
+        isWaiting: {
+            type: Boolean,
+            default: true,
         },
     },
     {

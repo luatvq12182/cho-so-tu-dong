@@ -3,8 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("./database");
+require("./schedule");
 const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
+const { autoGenNumbers, checkResult, autoNumber } = require("./src/services/SoHangNgay");
 
 const app = express();
 
@@ -97,3 +99,7 @@ app.get("/api/domains", authenticateToken, DomainController.getDomains);
 app.post("/api/domains", authenticateToken, DomainController.createDomain);
 app.put("/api/domains", authenticateToken, DomainController.updateDomain);
 app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain);
+
+app.get("/api/autoGenNumbers", authenticateToken, autoGenNumbers);
+app.get("/api/checkResult", authenticateToken, checkResult);
+app.get("/api/soHangNgay", autoNumber);
