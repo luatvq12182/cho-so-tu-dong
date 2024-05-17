@@ -248,9 +248,21 @@ const autoNumber = async (req, res) => {
                                     const sHangNgay = e.toObject();
 
                                     const d = new Date(sHangNgay.createdAt);
-                                    const ngay = `${d.getDate()}-${
-                                        d.getMonth() + 1
-                                    }-${d.getFullYear()}`;
+                                    let ngay;
+
+                                    if (loaiSoiCauObj.numberOfDays === 1) {
+                                        ngay = `${d.getDate()}-${
+                                            d.getMonth() + 1
+                                        }-${d.getFullYear()}`;
+                                    } else {
+                                        const endDate = new Date();
+
+                                        endDate.setDate(endDate.getDate() + (loaiSoiCauObj.numberOfDays - 1));
+
+                                        ngay = `${d.getDate()} → ${endDate.getDate()}-${
+                                            d.getMonth() + 1
+                                        }-${d.getFullYear()}`;
+                                    }
 
                                     let rsHtml = "";
 
