@@ -6,7 +6,7 @@ const DomainModel = require("../models/Domain");
 const { randomNumber } = require("../utils");
 const { PRIZE, NUMBER_TYPE, ONE_DAY } = require("../constants");
 
-const autoGenNumbers = async (req, res) => {
+const autoGenNumbers = async (_req, res) => {
     const loaiSoiCau = await LoaiSoiCauModel.find({});
     const domains = await DomainModel.find({});
 
@@ -47,12 +47,14 @@ const autoGenNumbers = async (req, res) => {
         }
     }
 
-    res.json({
-        msg: "OK",
-    });
+    if (res) {
+        res.json({
+            msg: "OK",
+        });
+    }
 };
 
-const checkResult = async (req, res) => {
+const checkResult = async (_req, res) => {
     const loaiSoiCau = await LoaiSoiCauModel.find({});
     const domains = await DomainModel.find({});
 
@@ -196,7 +198,9 @@ const checkResult = async (req, res) => {
         }
     }
 
-    res.json({ ketqua, lo, de, bacang });
+    if (res) {
+        res.json({ ketqua, lo, de, bacang });
+    }
 };
 
 const autoNumber = async (req, res) => {
@@ -342,9 +346,11 @@ const autoNumber = async (req, res) => {
                                             </td>
                                             <td>
                                                 <span class="table-soi-cau-number">
-                                                    ${sHangNgay.number.join(
-                                                        " - "
-                                                    )}
+                                                    ${loaiSoiCauObj.numberType === NUMBER_TYPE.CAP_SO_DAO
+                                                        ? sHangNgay.number.map((e) => {
+                                                              return `(${e.join(" - ")})`;
+                                                          })
+                                                        : sHangNgay.number.join(" - ")}
                                                 </span>
                                             </td>
                                             <td>${
