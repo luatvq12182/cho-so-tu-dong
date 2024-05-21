@@ -114,7 +114,7 @@ const checkResult = async (_req, res) => {
                 }).sort({ createdAt: -1 })
             ).toObject();
 
-            const number = soCho.number;
+            const number = soCho.number.flat();
 
             if (soCho) {
                 const today = new Date();
@@ -257,7 +257,7 @@ const autoNumber = async (req, res) => {
                                     } else {
                                         const endDate = new Date();
 
-                                        endDate.setDate(endDate.getDate() + (loaiSoiCauObj.numberOfDays - 1));
+                                        endDate.setDate(d.getDate() + (loaiSoiCauObj.numberOfDays - 1));
 
                                         ngay = `${d.getDate()} → ${endDate.getDate()}-${
                                             d.getMonth() + 1
