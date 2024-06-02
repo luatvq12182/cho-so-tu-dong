@@ -7,6 +7,7 @@ require("./schedule");
 const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
 const { autoGenNumbers, checkResult, autoNumber } = require("./src/services/SoHangNgay");
+const LoTopService = require('./src/services/LoTop');
 
 const app = express();
 
@@ -103,3 +104,4 @@ app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain)
 app.get("/api/autoGenNumbers", authenticateToken, autoGenNumbers);
 app.get("/api/checkResult", authenticateToken, checkResult);
 app.get("/api/soHangNgay", autoNumber);
+app.get('/api/loTop/soHangNgay', LoTopService.autoNumber);
