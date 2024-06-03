@@ -11,4 +11,5 @@ schedule.scheduleJob("0 1 * * *", function () {
 schedule.scheduleJob("0 19 * * *", function () {
     console.log("Bắt đầu check kết quả");
     SoHangNgayService.checkResult();
+    LoTopService.checkResult();
 });

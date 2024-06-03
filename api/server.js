@@ -105,3 +105,6 @@ app.get("/api/autoGenNumbers", authenticateToken, autoGenNumbers);
 app.get("/api/checkResult", authenticateToken, checkResult);
 app.get("/api/soHangNgay", autoNumber);
 app.get('/api/loTop/soHangNgay', LoTopService.autoNumber);
+app.get('/api/loTop/checkResult', LoTopService.checkResult);
+
+LoTopService.autoGenNumbers();
