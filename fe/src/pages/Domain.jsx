@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button, Card, CardBody, Table } from "reactstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ModalDomain from "../components/ModalDomain";
 import {
     createDomain,
     getDomains,
     updateDomain,
     deleteDomain,
+    autoGenNumbers,
 } from "../services";
 
 const Domain = () => {
@@ -37,7 +40,7 @@ const Domain = () => {
 
                 window.location.href = "/sign-in";
             }
-            
+
             console.log("Error getDomains: ", error);
         }
     };
@@ -55,7 +58,7 @@ const Domain = () => {
 
                 window.location.href = "/sign-in";
             }
-            
+
             console.log("Error createDomain: ", error);
         }
     };
@@ -73,7 +76,7 @@ const Domain = () => {
 
                 window.location.href = "/sign-in";
             }
-            
+
             console.log("Error updateDomain: ", error);
         }
     };
@@ -93,8 +96,19 @@ const Domain = () => {
 
                 window.location.href = "/sign-in";
             }
-            
+
             console.log("Error deleteDomain: ", error);
+        }
+    };
+
+    const handleAutoGenNumbers = async () => {
+        try {
+            await autoGenNumbers();
+
+            toast.info(`Done!`);
+        } catch (error) {
+            console.log("Error");
+            toast.error('Thất bại');
         }
     };
 
@@ -113,6 +127,8 @@ const Domain = () => {
                 }}
             />
 
+            <ToastContainer />
+
             <Card>
                 <CardBody>
                     <div className="mb-2">
@@ -121,9 +137,16 @@ const Domain = () => {
                                 setDataEdit(null);
                                 toggle();
                             }}
-                            color="primary"
+                            color="primary me-2"
                         >
                             Thêm mới
+                        </Button>
+
+                        <Button
+                            onClick={handleAutoGenNumbers}
+                            color="success primary"
+                        >
+                            Tạo số
                         </Button>
                     </div>
 

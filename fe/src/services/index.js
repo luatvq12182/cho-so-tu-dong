@@ -51,6 +51,10 @@ const deleteLoaiSoiCau = (id) => {
     return httpClient.delete("/api/loaiSoiCau/" + id);
 };
 
+const autoGenNumbers = () => {
+    return httpClient.get("/api/autoGenNumbers");
+}
+
 export {
     signIn,
     verifyToken,
@@ -62,4 +66,5 @@ export {
     createLoaiSoiCau,
     updateLoaiSoiCau,
     deleteLoaiSoiCau,
+    autoGenNumbers,
 };

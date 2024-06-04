@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, CardBody, Table } from "reactstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ModalLoaiSoiCau from "../components/ModalLoaiSoiCau";
 import {
     createLoaiSoiCau,
@@ -110,8 +112,18 @@ const LoaiSoiCau = () => {
         }
     };
 
+    const notify = (msg, err) => {
+        if (err) {
+            toast.error(msg);
+        } else {
+            toast.info(msg);
+        }
+    };
+
     return (
         <div>
+            <ToastContainer />
+
             <ModalLoaiSoiCau
                 open={isOpen}
                 toggle={toggle}
@@ -185,6 +197,28 @@ const LoaiSoiCau = () => {
                                                 {e.numberOfDays}
                                             </td>
                                             <td>
+                                                <Button
+                                                    onClick={() => {
+                                                        const textToCopy = `[cho_so_tu_dong loai_soi_cau="${e.name}"]`;
+
+                                                        navigator.clipboard
+                                                            .writeText(
+                                                                textToCopy
+                                                            )
+                                                            .then(
+                                                                function () {
+                                                                    notify(`Copy thành công: ${textToCopy}`);
+                                                                },
+                                                                function (err) {
+                                                                    console.log(err);
+                                                                    notify(`Copy thất bại`, true);
+                                                                }
+                                                            );
+                                                    }}
+                                                    color="primary me-2"
+                                                >
+                                                    Shortcode
+                                                </Button>
                                                 <Button
                                                     onClick={() => {
                                                         handleEdit(e);
