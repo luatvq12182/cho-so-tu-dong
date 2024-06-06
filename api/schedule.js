@@ -9,7 +9,7 @@ schedule.scheduleJob("0 1 * * *", function () {
     LoTopService.autoGenNumbers();
 });
 
-schedule.scheduleJob("0 19 * * *", function () {
+schedule.scheduleJob("35 18 * * *", function () {
     logger.info('BẮT ĐẦU CHECK KẾT QUẢ');
     SoHangNgayService.checkResult();
     LoTopService.checkResult();
