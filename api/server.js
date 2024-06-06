@@ -1,13 +1,20 @@
 require("dotenv").config();
+const fs = require('fs');
+const path = require('path');
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("./database");
 require("./schedule");
+const logger = require("./src/configs/logger");
 const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
-const { autoGenNumbers, checkResult, autoNumber } = require("./src/services/SoHangNgay");
+const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require('./src/services/LoTop');
+
+process.on("uncaughtException", (error) => {
+    logger.error(error.stack);
+});
 
 const app = express();
 
@@ -29,6 +36,8 @@ app.get("/api/hello-world", (_req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log("Server is running on port: ", process.env.PORT);
+
+    logger.info('STARTING SERVER')
 });
 
 app.post("/api/sign-in", (req, res) => {
@@ -101,10 +110,45 @@ app.post("/api/domains", authenticateToken, DomainController.createDomain);
 app.put("/api/domains", authenticateToken, DomainController.updateDomain);
 app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain);
 
-app.get("/api/autoGenNumbers", authenticateToken, autoGenNumbers);
-app.get("/api/checkResult", authenticateToken, checkResult);
-app.get("/api/soHangNgay", autoNumber);
-app.get('/api/loTop/soHangNgay', LoTopService.autoNumber);
-app.get('/api/loTop/checkResult', LoTopService.checkResult);
+app.get("/api/autoGenNumbers", authenticateToken, SoHangNgayService.autoGenNumbers);
+app.get("/api/checkResult", authenticateToken, SoHangNgayService.checkResult);
+app.get("/api/soHangNgay", SoHangNgayService.autoNumber);
+app.get("/api/loTop/soHangNgay", LoTopService.autoNumber);
+app.get("/api/loTop/checkResult", LoTopService.checkResult);
 
-LoTopService.autoGenNumbers();
+app.get("/api/logs", authenticateToken, (_req, res) => {
+    const logDirectory = path.join(__dirname, 'logs');
+
+    fs.readdir(logDirectory, (err, files) => {
+        if (err) {
+            return res.status(500).send('Unable to scan directory: ' + err);
+        }
+        
+        const logFiles = files.filter(file => path.extname(file) === '.log');
+        res.json(logFiles);
+    });    
+});
+
+app.get('/api/logs/:fileName', authenticateToken, (req, res) => {
+    const { fileName } = req.params;
+    const logFilePath = path.join(__dirname, 'logs', fileName);
+
+    fs.readFile(logFilePath, 'utf8', (err, data) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                return res.status(404).send('File not found');
+            }
+            return res.status(500).send('Error reading file: ' + err);
+        }
+
+        const logLines = data.split('\n').filter(line => line.trim() !== '').map(line => {
+            try {
+                return JSON.parse(line);
+            } catch (parseErr) {
+                return { error: 'Invalid JSON', line };
+            }
+        });
+
+        res.json(logLines);
+    });
+});

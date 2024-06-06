@@ -20,6 +20,8 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.3.4",
         "node-schedule": "^2.1.1",
-        "nodemon": "^3.1.0"
+        "nodemon": "^3.1.0",
+        "winston": "^3.13.0",
+        "winston-daily-rotate-file": "^5.0.0"
     }
 }

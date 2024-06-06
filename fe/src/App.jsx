@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import LoaiSoiCau from "./pages/LoaiSoiCau";
 import ChoSoHangNgay from "./pages/ChoSoHangNgay";
 import SignIn from "./pages/SignIn";
+import LogFiles from "./pages/LogFiles";
+import LogFileContent from "./pages/LogFileContent";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
             {
                 path: "cho-so-hang-ngay",
                 element: <ChoSoHangNgay />,
+            },
+            {
+                path: "logs",
+                element: <LogFiles />,
+            },
+            {
+                path: "logs/:fileName",
+                element: <LogFileContent />,
             },
         ],
     },

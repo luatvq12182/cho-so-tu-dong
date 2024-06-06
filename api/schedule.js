@@ -1,15 +1,16 @@
 const schedule = require("node-schedule");
 const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require("./src/services/LoTop");
+const logger = require('./src/configs/logger');
 
 schedule.scheduleJob("0 1 * * *", function () {
-    console.log("Bắt đầu cho số");
+    logger.info('BẮT ĐẦU CHO SỐ');
     SoHangNgayService.autoGenNumbers();
     LoTopService.autoGenNumbers();
 });
 
 schedule.scheduleJob("0 19 * * *", function () {
-    console.log("Bắt đầu check kết quả");
+    logger.info('BẮT ĐẦU CHECK KẾT QUẢ');
     SoHangNgayService.checkResult();
     LoTopService.checkResult();
 });

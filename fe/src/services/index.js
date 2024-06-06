@@ -55,6 +55,14 @@ const autoGenNumbers = () => {
     return httpClient.get("/api/autoGenNumbers");
 }
 
+const getLogFiles = () => {
+    return httpClient.get('/api/logs')
+}
+
+const getLogFileContent = (fileName) => {
+    return httpClient.get('/api/logs/' + fileName);
+}
+
 export {
     signIn,
     verifyToken,
@@ -67,4 +75,6 @@ export {
     updateLoaiSoiCau,
     deleteLoaiSoiCau,
     autoGenNumbers,
+    getLogFiles,
+    getLogFileContent,
 };

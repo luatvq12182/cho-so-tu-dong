@@ -35,6 +35,9 @@ const autoGenNumbers = async (_req, res) => {
 
             let shuffledArray = shuffle(array);
 
+            const date = new Date();
+            date.setHours(1, 0, 0, 0);
+
             const newObj = new LoTopModel({
                 domainId: domain._id.toString(),
                 numbers: shuffledArray.map((e) => {
@@ -42,6 +45,7 @@ const autoGenNumbers = async (_req, res) => {
                         number: e,
                     };
                 }),
+                createdAt: date,
             });
 
             await newObj.save();
@@ -148,26 +152,44 @@ const checkResult = async (req, res) => {
 };
 
 const autoNumber = async (req, res) => {
-    const { domain, cvHtml } = req.query;
+    const { domain, time, cvHtml } = req.query;
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
 
     if (!domainObj) {
-        res.json({
-            html: "",
+        res.status(404).json({
+            msg: "Provide domain"
         });
         return;
+    }
+
+    let startOfDay = new Date();
+    let endOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    if (time === "yesterday") {
+        startOfDay.setDate(startOfDay.getDate() - 1);
+        endOfDay.setDate(endOfDay.getDate() - 1);
+    } else if (time == "2_days_ago") {
+        startOfDay.setDate(startOfDay.getDate() - 2);
+        endOfDay.setDate(endOfDay.getDate() - 2);
     }
 
     const loTop = await LoTopModel.findOne({
         domainId: domainObj._id.toString(),
-    }).sort({ createdAt: -1 });
+        createdAt: {
+            $gte: startOfDay,
+            $lte: endOfDay
+        },
+    });
 
-    if (loTop?.length === 0) {
-        res.json({
-            html: "",
+    if (!loTop) {
+        res.status(404).json({
+            msg: "Not found result",
         });
         return;
     }
+    
     const numbers = loTop.toObject().numbers;
     const isWaiting = loTop.toObject().isWaiting;
 
