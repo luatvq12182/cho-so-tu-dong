@@ -64,9 +64,9 @@ const checkResult = async (req, res) => {
         const domains = await DomainModel.find({});
 
         const today = new Date();
-        if (today.getHours() < 19) {
-            today.setDate(today.getDate() - 1);
-        }
+        // if (today.getHours() < 19) {
+        //     today.setDate(today.getDate() - 1);
+        // }
 
         const ngay = `${today.getDate()}-${
             today.getMonth() + 1
