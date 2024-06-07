@@ -66,10 +66,13 @@ const LogFileContent = () => {
                                 <td>{e.message}</td>
                                 <td>{`${d.toString().padStart(2, "0")}-${m
                                     .toString()
-                                    .padStart(
-                                        2,
-                                        "0"
-                                    )}-${y} ${h}:${mi}:${s}`}</td>
+                                    .padStart(2, "0")}-${y} ${h
+                                    .toString()
+                                    .padStart(2, "0")}:${mi
+                                    .toString()
+                                    .padStart(2, "0")}:${s
+                                    .toString()
+                                    .padStart(2, "0")}`}</td>
                             </tr>
                         );
                     })}

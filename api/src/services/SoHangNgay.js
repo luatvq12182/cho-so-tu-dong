@@ -204,7 +204,7 @@ const checkResult = async (_req, res) => {
 };
 
 const autoNumber = async (req, res) => {
-    const { domain, loaiSoiCau, cvHtml } = req.query;
+    const { domain, loaiSoiCau, cvHtml, rows } = req.query;
 
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
     const loaiSoiCauObj = (
@@ -221,7 +221,7 @@ const autoNumber = async (req, res) => {
     const soHangNgay = await SoHangNgayModel.find({
         loaiSoiCauId: loaiSoiCauObj._id.toString(),
         domainId: domainObj._id.toString(),
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }).limit(rows ? rows : 30);
 
     if (soHangNgay?.length === 0) {
         res.json({
