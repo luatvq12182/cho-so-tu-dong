@@ -301,8 +301,20 @@ const autoNumber = async (req, res) => {
                                         } else {
                                             const rs = sHangNgay.result;
 
+                                            while (rs.length < loaiSoiCauObj.numberOfDays) {
+                                                rs.push(null);
+                                            }
+
                                             rsHtml = rs
                                                 .map((e, i) => {
+                                                    if (!e) {
+                                                        return `
+                                                            <div class="ket-qua-ngay ket-qua-ngay-${i + 1}">
+                                                                Ngày ${i + 1}: Chờ kết quả...
+                                                            </div>
+                                                        `;
+                                                    }
+
                                                     return `
                                                     <div class="ket-qua-ngay ket-qua-ngay-${
                                                         i + 1
@@ -318,11 +330,6 @@ const autoNumber = async (req, res) => {
                                                                               (
                                                                                   rsByDay
                                                                               ) => {
-                                                                                  console.log(
-                                                                                      2,
-                                                                                      rsByDay
-                                                                                  );
-
                                                                                   if (
                                                                                       rsByDay?.type ===
                                                                                       PRIZE.DE
