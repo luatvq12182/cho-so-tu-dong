@@ -1,3 +1,4 @@
+const logger = require("../configs/logger");
 const DomainService = require("../services/Domain");
 
 const getDomains = async (req, res) => {
@@ -12,6 +13,8 @@ const getDomains = async (req, res) => {
 
 const createDomain = async (req, res) => {
     try {
+        logger.info('CREATE DOMAIN: ' + req.body.name);
+
         const data = await DomainService.createDomain(req.body);
 
         res.json(data);
@@ -22,6 +25,8 @@ const createDomain = async (req, res) => {
 
 const updateDomain = async (req, res) => {
     try {
+        logger.info('UPDATE DOMAIN: ' + req.body._id);
+        
         const data = await DomainService.updateDomain(req.body);
 
         res.json(data);
@@ -32,6 +37,8 @@ const updateDomain = async (req, res) => {
 
 const deleteDomain = async (req, res) => {
     try {
+        logger.info('DELETE DOMAIN: ' + req.params.id);
+
         await DomainService.deleteDomain(req.params.id);
 
         res.json("OK");

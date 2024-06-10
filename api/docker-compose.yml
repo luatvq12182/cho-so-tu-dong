@@ -11,6 +11,8 @@ services:
     restart: always
     networks:
       - xs-network
+    volumes:
+      - ./logs:/app/logs      
 
 networks:
   xs-network:

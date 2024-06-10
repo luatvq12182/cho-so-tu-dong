@@ -22,6 +22,8 @@ const getLoaiSoiCaus = async (req, res) => {
 
 const createLoaiSoiCau = async (req, res) => {
     try {
+        logger.info('CREATE LoaiSoiCau: ' + JSON.stringify(req.body));
+
         const data = await LoaiSoiCauService.createLoaiSoiCau(req.body);
 
         res.json(data);
@@ -32,6 +34,8 @@ const createLoaiSoiCau = async (req, res) => {
 
 const updateLoaiSoiCau = async (req, res) => {
     try {
+        logger.info('UPDATE LoaiSoiCau: ' + JSON.stringify(req.body));
+
         const data = await LoaiSoiCauService.updateLoaiSoiCau(req.body);
 
         res.json(data);
@@ -42,6 +46,8 @@ const updateLoaiSoiCau = async (req, res) => {
 
 const deleteLoaiSoiCau = async (req, res) => {
     try {
+        logger.info('DELETE LoaiSoiCau: ' + req.body._id);
+
         await LoaiSoiCauService.deleteLoaiSoiCau(req.params.id);
 
         res.json("OK");

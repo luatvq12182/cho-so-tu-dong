@@ -112,7 +112,9 @@ const checkResult = async (_req, res) => {
                     domainId: domain._id.toString(),
                     createdAt: { $gte: d },
                 }).sort({ createdAt: -1 })
-            ).toObject();
+            )?.toObject();
+
+            if (!soCho) continue;
 
             const number = soCho.number.flat();
 
