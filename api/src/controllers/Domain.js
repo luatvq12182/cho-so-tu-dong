@@ -7,6 +7,7 @@ const getDomains = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -19,6 +20,7 @@ const createDomain = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -31,6 +33,7 @@ const updateDomain = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -43,6 +46,7 @@ const deleteDomain = async (req, res) => {
 
         res.json("OK");
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };

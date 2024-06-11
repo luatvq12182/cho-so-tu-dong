@@ -1,3 +1,4 @@
+const logger = require("../configs/logger");
 const LoaiSoiCauService = require("../services/LoaiSoiCau");
 
 const getLoaiSoiCaus = async (req, res) => {
@@ -6,6 +7,7 @@ const getLoaiSoiCaus = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -28,6 +30,7 @@ const createLoaiSoiCau = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -40,6 +43,7 @@ const updateLoaiSoiCau = async (req, res) => {
 
         res.json(data);
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
@@ -52,6 +56,7 @@ const deleteLoaiSoiCau = async (req, res) => {
 
         res.json("OK");
     } catch (error) {
+        logger.error(error.stack);
         res.status(400).json(error);
     }
 };
