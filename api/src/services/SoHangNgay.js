@@ -310,7 +310,7 @@ const autoNumber = async (req, res) => {
                                                     if (!e) {
                                                         return `
                                                             <div class="ket-qua-ngay ket-qua-ngay-${i + 1}">
-                                                                Ngày ${i + 1}: Chờ kết quả...
+                                                                Ngày ${i + 1}: <span class="cho-ket-qua">Chờ kết quả...</span>
                                                             </div>
                                                         `;
                                                     }
