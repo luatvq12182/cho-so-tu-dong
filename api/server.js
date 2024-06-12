@@ -11,6 +11,7 @@ const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
 const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require('./src/services/LoTop');
+const SoiCauHangNgayService = require('./src/services/SoiCauHangNgay');
 
 process.on("uncaughtException", (error) => {
     logger.error(error.stack);
@@ -115,6 +116,9 @@ app.get("/api/checkResult", authenticateToken, SoHangNgayService.checkResult);
 app.get("/api/soHangNgay", SoHangNgayService.autoNumber);
 app.get("/api/loTop/soHangNgay", LoTopService.autoNumber);
 app.get("/api/loTop/checkResult", LoTopService.checkResult);
+
+app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbers);
+app.get("/api/soiCauHangNgay/soHangNgay", SoiCauHangNgayService.getSoiCauHangNgay);
 
 app.get("/api/logs", authenticateToken, (_req, res) => {
     const logDirectory = path.join(__dirname, 'logs');
