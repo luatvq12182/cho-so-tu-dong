@@ -4,6 +4,7 @@ const SoHangNgayModel = require("../models/SoHangNgay");
 const LoaiSoiCauModel = require("../models/LoaiSoiCau");
 const DomainModel = require("../models/Domain");
 const { randomNumber } = require("../utils");
+const { cache } = require("../configs/cache");
 const { PRIZE, NUMBER_TYPE, ONE_DAY } = require("../constants");
 
 const autoGenNumbers = async (_req, res) => {
@@ -208,6 +209,13 @@ const checkResult = async (_req, res) => {
 const autoNumber = async (req, res) => {
     const { domain, loaiSoiCau, cvHtml, rows } = req.query;
 
+    if (cache.isExist(`SO_HANG_NGAY_${domain}_${loaiSoiCau}_${+cvHtml}_${rows}`)) {
+        res.json({
+            html: cache.getKey(`SO_HANG_NGAY_${domain}_${loaiSoiCau}_${+cvHtml}_${rows}`)
+        });
+        return;
+    }
+
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
     const loaiSoiCauObj = (
         await LoaiSoiCauModel.findOne({ name: loaiSoiCau })
@@ -223,7 +231,7 @@ const autoNumber = async (req, res) => {
     const soHangNgay = await SoHangNgayModel.find({
         loaiSoiCauId: loaiSoiCauObj._id.toString(),
         domainId: domainObj._id.toString(),
-    }).sort({ createdAt: -1 }).limit(rows ? rows : 30);
+    }).sort({ createdAt: -1 }).limit(rows ? +rows : 30);
 
     if (soHangNgay?.length === 0) {
         res.json({
@@ -233,160 +241,164 @@ const autoNumber = async (req, res) => {
     }
 
     if (+cvHtml) {
-        res.json({
-            html: `
-                    <table class="table-soi-cau">
-                        <thead>
-                            <tr>
-                                <th>Ngày</th>
-                                <th>Số</th>
-                                <th>Kết quả</th>
-                            </tr>
-                        </thead>
-        
-                        <tbody>
-                            ${soHangNgay
-                                .map((e) => {
-                                    const sHangNgay = e.toObject();
+        const html = `
+            <table class="table-soi-cau">
+                <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Số</th>
+                        <th>Kết quả</th>
+                    </tr>
+                </thead>
 
-                                    const d = new Date(sHangNgay.createdAt);
-                                    let ngay;
+                <tbody>
+                    ${soHangNgay
+                        .map((e) => {
+                            const sHangNgay = e.toObject();
 
-                                    if (loaiSoiCauObj.numberOfDays === 1) {
-                                        ngay = `${d.getDate()}-${
-                                            d.getMonth() + 1
-                                        }-${d.getFullYear()}`;
+                            const d = new Date(sHangNgay.createdAt);
+                            let ngay;
+
+                            if (loaiSoiCauObj.numberOfDays === 1) {
+                                ngay = `${d.getDate()}-${
+                                    d.getMonth() + 1
+                                }-${d.getFullYear()}`;
+                            } else {
+                                const endDate = new Date();
+
+                                endDate.setDate(d.getDate() + (loaiSoiCauObj.numberOfDays - 1));
+
+                                ngay = `${d.getDate()} → ${endDate.getDate()}-${
+                                    d.getMonth() + 1
+                                }-${d.getFullYear()}`;
+                            }
+
+                            let rsHtml = "";
+
+                            if (!sHangNgay.isWaiting) {
+                                if (loaiSoiCauObj.numberOfDays === 1) {
+                                    const rs = sHangNgay.result[0];
+
+                                    if (rs.length === 0) {
+                                        rsHtml =
+                                            '<span class="truot">Trượt</span>';
                                     } else {
-                                        const endDate = new Date();
+                                        rsHtml =
+                                            "Ăn " +
+                                            rs
+                                                .map((e) => {
+                                                    if (
+                                                        e?.type ===
+                                                        PRIZE.DE
+                                                    ) {
+                                                        return `<span class="number_return de">đề ${e.number}</span>`;
+                                                    }
 
-                                        endDate.setDate(d.getDate() + (loaiSoiCauObj.numberOfDays - 1));
+                                                    if (
+                                                        e?.type ===
+                                                        PRIZE.BA_CANG
+                                                    ) {
+                                                        return `<span class="number_return ba_cang">ba càng ${e.number}</span>`;
+                                                    }
 
-                                        ngay = `${d.getDate()} → ${endDate.getDate()}-${
-                                            d.getMonth() + 1
-                                        }-${d.getFullYear()}`;
+                                                    return `<span class="number_return">${e.number}</span> <span class="number_times">${e.times}</span> nháy`;
+                                                })
+                                                .join(", ");
+                                    }
+                                } else {
+                                    const rs = sHangNgay.result;
+
+                                    while (rs.length < loaiSoiCauObj.numberOfDays) {
+                                        rs.push(null);
                                     }
 
-                                    let rsHtml = "";
-
-                                    if (!sHangNgay.isWaiting) {
-                                        if (loaiSoiCauObj.numberOfDays === 1) {
-                                            const rs = sHangNgay.result[0];
-
-                                            if (rs.length === 0) {
-                                                rsHtml =
-                                                    '<span class="truot">Trượt</span>';
-                                            } else {
-                                                rsHtml =
-                                                    "Ăn " +
-                                                    rs
-                                                        .map((e) => {
-                                                            if (
-                                                                e?.type ===
-                                                                PRIZE.DE
-                                                            ) {
-                                                                return `<span class="number_return de">đề ${e.number}</span>`;
-                                                            }
-
-                                                            if (
-                                                                e?.type ===
-                                                                PRIZE.BA_CANG
-                                                            ) {
-                                                                return `<span class="number_return ba_cang">ba càng ${e.number}</span>`;
-                                                            }
-
-                                                            return `<span class="number_return">${e.number}</span> <span class="number_times">${e.times}</span> nháy`;
-                                                        })
-                                                        .join(", ");
-                                            }
-                                        } else {
-                                            const rs = sHangNgay.result;
-
-                                            while (rs.length < loaiSoiCauObj.numberOfDays) {
-                                                rs.push(null);
-                                            }
-
-                                            rsHtml = rs
-                                                .map((e, i) => {
-                                                    if (!e) {
-                                                        return `
-                                                            <div class="ket-qua-ngay ket-qua-ngay-${i + 1}">
-                                                                Ngày ${i + 1}: <span style="color: #ff8b00;" class="cho-ket-qua">Chờ kết quả...</span>
-                                                            </div>
-                                                        `;
-                                                    }
-
-                                                    return `
-                                                    <div class="ket-qua-ngay ket-qua-ngay-${
-                                                        i + 1
-                                                    }">
-                                                        Ngày ${i + 1}: ${
-                                                        e.length === 0
-                                                            ? '<span class="truot">Trượt</span>'
-                                                            : e.map(() => {
-                                                                  return (
-                                                                      "Ăn " +
-                                                                      e
-                                                                          .map(
-                                                                              (
-                                                                                  rsByDay
-                                                                              ) => {
-                                                                                  if (
-                                                                                      rsByDay?.type ===
-                                                                                      PRIZE.DE
-                                                                                  ) {
-                                                                                      return `<span class="number_return de">đề ${rsByDay.number}</span>`;
-                                                                                  }
-
-                                                                                  if (
-                                                                                      rsByDay?.type ===
-                                                                                      PRIZE.BA_CANG
-                                                                                  ) {
-                                                                                      return `<span class="number_return ba_cang">ba càng ${rsByDay.number}</span>`;
-                                                                                  }
-
-                                                                                  return `<span class="number_return">${rsByDay.number}</span> <span class="number_times">${rsByDay.times}</span> nháy`;
-                                                                              }
-                                                                          )
-                                                                          .join(
-                                                                              ", "
-                                                                          )
-                                                                  );
-                                                              })
-                                                    }
+                                    rsHtml = rs
+                                        .map((e, i) => {
+                                            if (!e) {
+                                                return `
+                                                    <div class="ket-qua-ngay ket-qua-ngay-${i + 1}">
+                                                        Ngày ${i + 1}: <span style="color: #ff8b00;" class="cho-ket-qua">Chờ kết quả...</span>
                                                     </div>
                                                 `;
-                                                })
-                                                .join("");
-                                        }
-                                    }
+                                            }
 
-                                    return `
-                                        <tr>
-                                            <td>
-                                                <span class="table-soi-cau-ngay">${ngay}</span>
-                                            </td>
-                                            <td>
-                                                <span class="table-soi-cau-number">
-                                                    ${loaiSoiCauObj.numberType === NUMBER_TYPE.CAP_SO_DAO
-                                                        ? sHangNgay.number.map((e) => {
-                                                              return `(${e.join(" - ")})`;
-                                                          })
-                                                        : sHangNgay.number.join(" - ")}
-                                                </span>
-                                            </td>
-                                            <td>${
-                                                sHangNgay.isWaiting
-                                                    ? "Chờ kết quả..."
-                                                    : rsHtml
-                                            }</td>
-                                        </tr>                                    
-                                    `;
-                                })
-                                .join("")}
-                            
-                        </tbody>
-                    </table>
-                `,
+                                            return `
+                                            <div class="ket-qua-ngay ket-qua-ngay-${
+                                                i + 1
+                                            }">
+                                                Ngày ${i + 1}: ${
+                                                e.length === 0
+                                                    ? '<span class="truot">Trượt</span>'
+                                                    : e.map(() => {
+                                                        return (
+                                                            "Ăn " +
+                                                            e
+                                                                .map(
+                                                                    (
+                                                                        rsByDay
+                                                                    ) => {
+                                                                        if (
+                                                                            rsByDay?.type ===
+                                                                            PRIZE.DE
+                                                                        ) {
+                                                                            return `<span class="number_return de">đề ${rsByDay.number}</span>`;
+                                                                        }
+
+                                                                        if (
+                                                                            rsByDay?.type ===
+                                                                            PRIZE.BA_CANG
+                                                                        ) {
+                                                                            return `<span class="number_return ba_cang">ba càng ${rsByDay.number}</span>`;
+                                                                        }
+
+                                                                        return `<span class="number_return">${rsByDay.number}</span> <span class="number_times">${rsByDay.times}</span> nháy`;
+                                                                    }
+                                                                )
+                                                                .join(
+                                                                    ", "
+                                                                )
+                                                        );
+                                                    })
+                                            }
+                                            </div>
+                                        `;
+                                        })
+                                        .join("");
+                                }
+                            }
+
+                            return `
+                                <tr>
+                                    <td>
+                                        <span class="table-soi-cau-ngay">${ngay}</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-soi-cau-number">
+                                            ${loaiSoiCauObj.numberType === NUMBER_TYPE.CAP_SO_DAO
+                                                ? sHangNgay.number.map((e) => {
+                                                    return `(${e.join(" - ")})`;
+                                                })
+                                                : sHangNgay.number.join(" - ")}
+                                        </span>
+                                    </td>
+                                    <td>${
+                                        sHangNgay.isWaiting
+                                            ? "Chờ kết quả..."
+                                            : rsHtml
+                                    }</td>
+                                </tr>                                    
+                            `;
+                        })
+                        .join("")}
+                    
+                </tbody>
+            </table>
+        `;
+
+        cache.setKey(`SO_HANG_NGAY_${domain}_${loaiSoiCau}_${+cvHtml}_${rows}`, html);
+
+        res.json({
+            html: html,
         });
     } else {
         res.json(soHangNgay);

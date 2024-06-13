@@ -3,6 +3,7 @@ const { DOMAINS, LICH_QUAY_THUONG, NUMBER_TYPE } = require("../constants");
 const DomainModel = require("../models/Domain");
 const SoiCauHangNgayModel = require("../models/SoiCauHangNgay");
 const { randomNumber, genHtmlValue } = require("../utils");
+const { cache } = require("../configs/cache");
 
 const autoGenNumbers = async (_req, res) => {
     const domains = await DomainModel.find({});
@@ -182,6 +183,13 @@ const autoGenNumbers = async (_req, res) => {
 const getSoiCauHangNgay = async (req, res) => {
     const { domain, cvHtml, site } = req.query;
 
+    if (cache.isExist(`SOI_CAU_HANG_NGAY_${domain}_${site}_${+cvHtml}`)) {
+        res.json({
+            html: cache.getKey(`SOI_CAU_HANG_NGAY_${domain}_${site}_${+cvHtml}`)
+        });
+        return;
+    }
+
     const domainObj = (await DomainModel.findOne({ name: site }))?.toObject();
 
     if (!domainObj) {
@@ -322,6 +330,8 @@ const getSoiCauHangNgay = async (req, res) => {
                 `;
             }
         }
+
+        cache.setKey(`SOI_CAU_HANG_NGAY_${domain}_${site}_${+cvHtml}`, html);
 
         res.json({
             html,

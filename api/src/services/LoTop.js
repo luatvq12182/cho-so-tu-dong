@@ -2,6 +2,7 @@ const axios = require("axios");
 const chalk = require("chalk");
 const LoTopModel = require("../models/LoTop");
 const DomainModel = require("../models/Domain");
+const { cache } = require("../configs/cache");
 
 const autoGenNumbers = async (_req, res) => {
     const domains = await DomainModel.find({});
@@ -155,6 +156,13 @@ const autoNumber = async (req, res) => {
     const { domain, time, cvHtml } = req.query;
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
 
+    if (cache.isExist(`LO_TOP_${domain}_${time}_${+cvHtml}`)) {
+        res.json({
+            html: cache.getKey(`LO_TOP_${domain}_${time}_${+cvHtml}`)
+        });
+        return;
+    }
+
     if (!domainObj) {
         res.status(404).json({
             msg: "Provide domain"
@@ -194,23 +202,27 @@ const autoNumber = async (req, res) => {
     const isWaiting = loTop.toObject().isWaiting;
 
     if (+cvHtml) {
+        const html = `
+            <div class="loTop">
+                ${numbers
+                    .map(({ number, win, times }) => {
+                        return `
+                        <div class="${isWaiting ? "waiting" : ""} ${
+                            win ? "win" : "lose"
+                        }">
+                            ${number}
+                            ${win ? `<span>${times}</span>` : ""}
+                        </div>
+                    `;
+                    })
+                    .join("")}
+            </div>
+        `;
+
+        cache.setKey(`LO_TOP_${domain}_${time}_${+cvHtml}`, html);
+
         res.json({
-            html: `
-                    <div class="loTop">
-                        ${numbers
-                            .map(({ number, win, times }) => {
-                                return `
-                                <div class="${isWaiting ? "waiting" : ""} ${
-                                    win ? "win" : "lose"
-                                }">
-                                    ${number}
-                                    ${win ? `<span>${times}</span>` : ""}
-                                </div>
-                            `;
-                            })
-                            .join("")}
-                    </div>
-                `,
+            html: html,
         });
     } else {
         res.json(loTop);
