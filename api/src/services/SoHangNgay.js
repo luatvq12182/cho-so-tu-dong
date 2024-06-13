@@ -28,7 +28,7 @@ const autoGenNumbers = async (_req, res) => {
             });
 
             if (obj.length > 0) {
-                console.log(chalk.yellow("Đã tạo: ", lSoiCau.name));
+                // console.log(chalk.yellow("Đã tạo: ", lSoiCau.name));
             } else {
                 const date = new Date();
                 // date.setDate(date.getDate() - 1);

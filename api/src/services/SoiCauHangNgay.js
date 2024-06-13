@@ -273,62 +273,60 @@ const getSoiCauHangNgay = async (req, res) => {
                 </table>            
             `;
         } else {
+            html += `<table class="table table-prediction" width="100%">`;
+
             for (let i = 0; i < find.length; i++) {
                 const scDaily = find[i].toObject();
 
                 html += `
-                    <table class="table table-prediction" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center prediction-title" colspan="2">Thống kê vip xổ số ${scDaily.province}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="name">Đặc biệt:</td>
-                                <td class="value">
-                                    Đầu ${genHtmlValue(scDaily.numbers.giaidacbiet.dau, true)} , 
-                                    Đuôi ${genHtmlValue(scDaily.numbers.giaidacbiet.duoi, true)}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="name">Cầu Loto VIP:</td>
-                                <td class="value">
-                                    ${genHtmlValue(scDaily.numbers.caulotoVip[0])} - 
-                                    ${genHtmlValue(scDaily.numbers.caulotoVip[1])}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="name">Loto Xiên:</td>
-                                <td class="value">
-                                    (${genHtmlValue(scDaily.numbers.lotoXien[0])} - ${genHtmlValue(scDaily.numbers.lotoXien[1])})
-                                    (${genHtmlValue(scDaily.numbers.lotoXien[2])} - ${genHtmlValue(scDaily.numbers.lotoXien[3])})
-                                    (${genHtmlValue(scDaily.numbers.lotoXien[4])} - ${genHtmlValue(scDaily.numbers.lotoXien[5])})
-                                    (${genHtmlValue(scDaily.numbers.lotoXien[6])} - ${genHtmlValue(scDaily.numbers.lotoXien[7])})
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="name">Loto về nhiều:</td>
-                                <td class="value">
-                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[0])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[1])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[2])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[3])}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="name">Loto lâu không về:</td>
-                                <td class="value">
-                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[0])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[1])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[2])} - 
-                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[3])}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>            
+                    <tr style="background-color: #f0f0f0;">
+                        <th class="text-center prediction-title" colspan="2">Thống kê vip xổ số ${scDaily.province}</th>
+                    </tr>
+                    <tr>
+                        <td class="name">Đặc biệt:</td>
+                        <td class="value">
+                            Đầu ${genHtmlValue(scDaily.numbers.giaidacbiet.dau, true)} , 
+                            Đuôi ${genHtmlValue(scDaily.numbers.giaidacbiet.duoi, true)}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name">Cầu Loto VIP:</td>
+                        <td class="value">
+                            ${genHtmlValue(scDaily.numbers.caulotoVip[0])} - 
+                            ${genHtmlValue(scDaily.numbers.caulotoVip[1])}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name">Loto Xiên:</td>
+                        <td class="value">
+                            (${genHtmlValue(scDaily.numbers.lotoXien[0])} - ${genHtmlValue(scDaily.numbers.lotoXien[1])})
+                            (${genHtmlValue(scDaily.numbers.lotoXien[2])} - ${genHtmlValue(scDaily.numbers.lotoXien[3])})
+                            (${genHtmlValue(scDaily.numbers.lotoXien[4])} - ${genHtmlValue(scDaily.numbers.lotoXien[5])})
+                            (${genHtmlValue(scDaily.numbers.lotoXien[6])} - ${genHtmlValue(scDaily.numbers.lotoXien[7])})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name">Loto về nhiều:</td>
+                        <td class="value">
+                            ${genHtmlValue(scDaily.numbers.lotovenhieu[0])} - 
+                            ${genHtmlValue(scDaily.numbers.lotovenhieu[1])} - 
+                            ${genHtmlValue(scDaily.numbers.lotovenhieu[2])} - 
+                            ${genHtmlValue(scDaily.numbers.lotovenhieu[3])}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="name">Loto lâu không về:</td>
+                        <td class="value">
+                            ${genHtmlValue(scDaily.numbers.lotolaukhongve[0])} - 
+                            ${genHtmlValue(scDaily.numbers.lotolaukhongve[1])} - 
+                            ${genHtmlValue(scDaily.numbers.lotolaukhongve[2])} - 
+                            ${genHtmlValue(scDaily.numbers.lotolaukhongve[3])}
+                        </td>
+                    </tr>
                 `;
             }
+
+            html += `</table>`;
         }
 
         cache.setKey(`SOI_CAU_HANG_NGAY_${domain}_${site}_${+cvHtml}`, html);

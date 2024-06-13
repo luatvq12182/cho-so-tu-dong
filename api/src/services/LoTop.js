@@ -19,7 +19,7 @@ const autoGenNumbers = async (_req, res) => {
         });
 
         if (obj.length > 0) {
-            console.log(chalk.yellow("Đã tạo Lô top hôm nay"));
+            // console.log(chalk.yellow("Đã tạo Lô top hôm nay"));
         } else {
             let array = [];
             for (let i = 0; i < 100; i++) {
