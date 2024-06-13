@@ -205,15 +205,27 @@ const autoNumber = async (req, res) => {
         const html = `
             <div class="loTop">
                 ${numbers
-                    .map(({ number, win, times }) => {
+                    .map(({ number, win, times }, index) => {
+                        let fontSize = '';
+
+                        if (index === 0) {
+                            fontSize = 34 + 'px';
+                        } else if (index > 0 && index <= 10) {
+                            fontSize = (33 - index * 0.2) + 'px';
+                        } else if (index > 10 && index <= 20) {
+                            fontSize = (32 - index * 0.2) + 'px';
+                        } else if (index > 20 && index <= 30) {
+                            fontSize = (31 - index * 0.2) + 'px';
+                        } else {
+                            fontSize = (30 - index * 0.15) + 'px';
+                        }
+
                         return `
-                        <div class="${isWaiting ? "waiting" : ""} ${
-                            win ? "win" : "lose"
-                        }">
-                            ${number}
-                            ${win ? `<span>${times}</span>` : ""}
-                        </div>
-                    `;
+                            <div style="margin-right: 5px; font-size: ${fontSize}; ${index > 30 ? "display: none;" : ""}" class="${isWaiting ? "waiting" : ""} ${win ? "win" : "lose"}">
+                                ${number}
+                                ${win ? `<span>${times}</span>` : ""}
+                            </div>
+                        `;
                     })
                     .join("")}
             </div>
