@@ -2,7 +2,7 @@ const { default: axios } = require("axios");
 const { DOMAINS, LICH_QUAY_THUONG, NUMBER_TYPE } = require("../constants");
 const DomainModel = require("../models/Domain");
 const SoiCauHangNgayModel = require("../models/SoiCauHangNgay");
-const { randomNumber } = require("../utils");
+const { randomNumber, genHtmlValue } = require("../utils");
 
 const autoGenNumbers = async (_req, res) => {
     const domains = await DomainModel.find({});
@@ -55,9 +55,9 @@ const autoGenNumbers = async (_req, res) => {
                                 };
                             }),
                             songthulodepnhat: randomNumber(
-                                NUMBER_TYPE.SO_NGAU_NHIEN_0_TO_99,
-                                2
-                            ).map((e) => {
+                                NUMBER_TYPE.CAP_SO_DAO,
+                                1
+                            ).flat().map((e) => {
                                 return {
                                     number: e,
                                 };
@@ -217,62 +217,48 @@ const getSoiCauHangNgay = async (req, res) => {
                 <table id="soi-cau-hang-ngay" class="table table-sm table-striped text-center table-bordered">
                     <tbody>
                         <tr>
-                            <td style="width: 50%">Giải đặc biệt</td>
-                            <td><b class="text-red">Đầu 4 , Đuôi 8</b></td>
-                        </tr>
-                        <tr>
-                            <td>Bạch thủ lô đẹp nhất</td>
-                            <td>
-                                <b class="text-red">
-                                    ${scDaily.numbers.bachthulodepnhat[0].number}
-                                </b>
+                            <td class="name" style="width: 50%">Giải đặc biệt</td>
+                            <td class="value">
+                                Đầu ${genHtmlValue(scDaily.numbers.giaidacbiet.dau, true)} , 
+                                Đuôi ${genHtmlValue(scDaily.numbers.giaidacbiet.duoi, true)}
                             </td>
                         </tr>
                         <tr>
-                            <td>Song thủ lô đẹp nhất</td>
-                            <td style="color: red; font-weight: bolder;">
-                                ${scDaily.numbers.songthulodepnhat[0].number} - 
-                                ${scDaily.numbers.songthulodepnhat[1].number}
+                            <td class="name">Bạch thủ lô đẹp nhất</td>
+                            <td class="value">
+                                ${genHtmlValue(scDaily.numbers.bachthulodepnhat[0])}
                             </td>
                         </tr>
                         <tr>
-                            <td>Lô kép đẹp nhất</td>
-                            <td style="color: red; font-weight: bolder;">
-                                ${scDaily.numbers.lokepdepnhat[0].number} - 
-                                ${scDaily.numbers.lokepdepnhat[1].number}
+                            <td class="name">Song thủ lô đẹp nhất</td>
+                            <td class="value">
+                                ${genHtmlValue(scDaily.numbers.songthulodepnhat[0])} - 
+                                ${genHtmlValue(scDaily.numbers.songthulodepnhat[1])}
                             </td>
                         </tr>
                         <tr>
-                            <td>Lô xiên 2, xiên 3 đẹp nhất</td>
-                            <td style="color: red; font-weight: bolder;">
-                                (${scDaily.numbers.loxien2xien3depnhat[0].number} - 
-                                ${scDaily.numbers.loxien2xien3depnhat[1].number})
-                                (${scDaily.numbers.loxien2xien3depnhat[2].number} - 
-                                ${scDaily.numbers.loxien2xien3depnhat[3].number} - 
-                                ${scDaily.numbers.loxien2xien3depnhat[4].number})
+                            <td class="name">Lô kép đẹp nhất</td>
+                            <td class="value">
+                                ${genHtmlValue(scDaily.numbers.lokepdepnhat[0])} - 
+                                ${genHtmlValue(scDaily.numbers.lokepdepnhat[1])}
                             </td>
                         </tr>
                         <tr>
-                            <td>Cầu 3 càng lô đẹp nhất</td>
-                            <td style="color: red; font-weight: bolder;">
-                                ${scDaily.numbers.cau3canglodepnhat[0].number} - 
-                                ${scDaily.numbers.cau3canglodepnhat[1].number} - 
-                                ${scDaily.numbers.cau3canglodepnhat[2].number}
+                            <td class="name">Lô xiên 2, xiên 3 đẹp nhất</td>
+                            <td class="value">
+                                (${genHtmlValue(scDaily.numbers.loxien2xien3depnhat[0])} - 
+                                ${genHtmlValue(scDaily.numbers.loxien2xien3depnhat[1])})
+                                (${genHtmlValue(scDaily.numbers.loxien2xien3depnhat[2])} - 
+                                ${genHtmlValue(scDaily.numbers.loxien2xien3depnhat[3])} - 
+                                ${genHtmlValue(scDaily.numbers.loxien2xien3depnhat[4])})
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" class="pd10">
-                                <p>Mời anh em nhận <b>con số đẹp nhất</b> cho mình trong ngày ${today.getDate().toString().padStart(2, '0')}/${today.getMonth().toString().padStart(2, '0')}/${today.getFullYear()}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="text-center pd10">
-                                    <button class="btn btn-danger" id="chotso_rbk">BẤM ĐỂ NHẬN SỐ</button>
-                                    <strong class="d-none">Cặp số sẽ xuất hiện sau <span id="countDown" class="text-danger"></span>
-                                        giây bạn nhé</strong>
-                                    <strong class="d-none">Cặp số đẹp ngày ${today.getDate().toString().padStart(2, '0')}/${today.getMonth().toString().padStart(2, '0')}/${today.getFullYear()} là: <span id="showResult" class="text-danger"></span></strong>
-                                </div>
+                            <td class="name">Cầu 3 càng lô đẹp nhất</td>
+                            <td class="value">
+                                ${genHtmlValue(scDaily.numbers.cau3canglodepnhat[0])} - 
+                                ${genHtmlValue(scDaily.numbers.cau3canglodepnhat[1])} - 
+                                ${genHtmlValue(scDaily.numbers.cau3canglodepnhat[2])}
                             </td>
                         </tr>
                     </tbody>
@@ -293,42 +279,42 @@ const getSoiCauHangNgay = async (req, res) => {
                             <tr>
                                 <td class="name">Đặc biệt:</td>
                                 <td class="value">
-                                    Đầu ${scDaily.numbers.giaidacbiet.dau.number} , 
-                                    Đuôi ${scDaily.numbers.giaidacbiet.duoi.number}
+                                    Đầu ${genHtmlValue(scDaily.numbers.giaidacbiet.dau, true)} , 
+                                    Đuôi ${genHtmlValue(scDaily.numbers.giaidacbiet.duoi, true)}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="name">Cầu Loto VIP:</td>
                                 <td class="value">
-                                    ${scDaily.numbers.caulotoVip[0].number} - 
-                                    ${scDaily.numbers.caulotoVip[1].number}
+                                    ${genHtmlValue(scDaily.numbers.caulotoVip[0])} - 
+                                    ${genHtmlValue(scDaily.numbers.caulotoVip[1])}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="name">Loto Xiên:</td>
                                 <td class="value">
-                                    (${scDaily.numbers.lotoXien[0].number} - ${scDaily.numbers.lotoXien[1].number})
-                                    (${scDaily.numbers.lotoXien[2].number} - ${scDaily.numbers.lotoXien[3].number})
-                                    (${scDaily.numbers.lotoXien[4].number} - ${scDaily.numbers.lotoXien[5].number})
-                                    (${scDaily.numbers.lotoXien[6].number} - ${scDaily.numbers.lotoXien[7].number})
+                                    (${genHtmlValue(scDaily.numbers.lotoXien[0])} - ${genHtmlValue(scDaily.numbers.lotoXien[1])})
+                                    (${genHtmlValue(scDaily.numbers.lotoXien[2])} - ${genHtmlValue(scDaily.numbers.lotoXien[3])})
+                                    (${genHtmlValue(scDaily.numbers.lotoXien[4])} - ${genHtmlValue(scDaily.numbers.lotoXien[5])})
+                                    (${genHtmlValue(scDaily.numbers.lotoXien[6])} - ${genHtmlValue(scDaily.numbers.lotoXien[7])})
                                 </td>
                             </tr>
                             <tr>
                                 <td class="name">Loto về nhiều:</td>
                                 <td class="value">
-                                    ${scDaily.numbers.lotovenhieu[0].number} - 
-                                    ${scDaily.numbers.lotovenhieu[1].number} - 
-                                    ${scDaily.numbers.lotovenhieu[2].number} - 
-                                    ${scDaily.numbers.lotovenhieu[3].number}
+                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[0])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[1])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[2])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotovenhieu[3])}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="name">Loto lâu không về:</td>
                                 <td class="value">
-                                    ${scDaily.numbers.lotolaukhongve[0].number} - 
-                                    ${scDaily.numbers.lotolaukhongve[1].number} - 
-                                    ${scDaily.numbers.lotolaukhongve[2].number} - 
-                                    ${scDaily.numbers.lotolaukhongve[3].number}
+                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[0])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[1])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[2])} - 
+                                    ${genHtmlValue(scDaily.numbers.lotolaukhongve[3])}
                                 </td>
                             </tr>
                         </tbody>
@@ -407,14 +393,14 @@ const checkResult = async (domain) => {
                     const dau = scDaily.numbers[key].dau.number;
                     const duoi = scDaily.numbers[key].duoi.number;
 
-                    if (giaidacbiet[0] === dau) {
+                    if (+giaidacbiet[0] === +dau) {
                         scDaily.numbers.giaidacbiet.dau.win = true;
                         scDaily.numbers.giaidacbiet.dau.returnNumber = giaidacbiet;
                     } else {
                         scDaily.numbers.giaidacbiet.dau.win = false;
                     }
 
-                    if (giaidacbiet[1] === duoi) {
+                    if (+giaidacbiet[1] === +duoi) {
                         scDaily.numbers.giaidacbiet.duoi.win = true;
                         scDaily.numbers.giaidacbiet.duoi.returnNumber = giaidacbiet;
                     } else {
@@ -472,21 +458,27 @@ const checkResult = async (domain) => {
                 .flat()
                 .map((e) => {
                     return e.slice(-2);
-                });
+                })
+                .reduce((pre, cr) => {
+                    return {
+                        ...pre,
+                        [cr]: pre[cr] ? pre[cr] + 1 : 1,
+                    };
+                }, {});
 
             for (let key in scDaily.numbers) {
                 if (key === "giaidacbiet") {
                     const dau = scDaily.numbers[key].dau.number;
                     const duoi = scDaily.numbers[key].duoi.number;
 
-                    if (giaidacbiet[0] === dau) {
+                    if (+giaidacbiet[0] === +dau) {
                         scDaily.numbers.giaidacbiet.dau.win = true;
                         scDaily.numbers.giaidacbiet.dau.returnNumber = giaidacbiet;
                     } else {
                         scDaily.numbers.giaidacbiet.dau.win = false;
                     }
 
-                    if (giaidacbiet[1] === duoi) {
+                    if (+giaidacbiet[1] === +duoi) {
                         scDaily.numbers.giaidacbiet.duoi.win = true;
                         scDaily.numbers.giaidacbiet.duoi.returnNumber = giaidacbiet;
                     } else {
@@ -494,8 +486,9 @@ const checkResult = async (domain) => {
                     }
                 } else {
                     scDaily.numbers[key].forEach(({ number }, index) => {
-                        if (lo.includes(number)) {
+                        if (lo[number]) {
                             scDaily.numbers[key][index].win = true;
+                            scDaily.numbers[key][index].times = lo[number];
                         } else {
                             scDaily.numbers[key][index].win = false;
                         }

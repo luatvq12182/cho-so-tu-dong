@@ -8,6 +8,7 @@ schedule.scheduleJob("0 1 * * *", function () {
     logger.info('BẮT ĐẦU CHO SỐ');
     SoHangNgayService.autoGenNumbers();
     LoTopService.autoGenNumbers();
+    SoiCauHangNgayService.autoGenNumbers();
 });
 
 schedule.scheduleJob("35 18 * * *", function () {

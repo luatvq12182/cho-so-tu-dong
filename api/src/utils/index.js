@@ -67,4 +67,36 @@ const randomNumber = (numberType, quantity) => {
     }
 };
 
-module.exports = { randomNumber };
+const genHtmlValue = (soCho, isSpecial) => {
+    if (isSpecial) {
+        if (soCho.win === undefined) {
+            return soCho.number;
+        } else {
+            if (soCho.win) {
+                return `
+                    <span class="win-number">${soCho.number} <span class="gdb">(về ${soCho.returnNumber})</span></span>
+                `;
+            } else {
+                return `
+                    <span class="lose-number">${soCho.number}</span>
+                `;
+            }
+        }
+    }
+
+    if (soCho.win === undefined) {
+        return soCho.number;
+    } else {
+        if (soCho.win) {
+            return `
+                <span class="win-number">${soCho.number}<span class="times">${soCho.times}</span></span>
+            `;
+        } else {
+            return `
+                <span class="lose-number">${soCho.number}</span>
+            `;
+        }
+    }
+};
+
+module.exports = { randomNumber, genHtmlValue };
