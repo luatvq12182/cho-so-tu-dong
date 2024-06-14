@@ -246,9 +246,9 @@ const getMultipleRs = async (req, res) => {
 
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
 
-    if (cache.isExist(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`)) {
+    if (cache.isExist(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}_${header}`)) {
         res.json({
-            html: cache.getKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`)
+            html: cache.getKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}_${header}`)
         });
         return;
     }
@@ -326,7 +326,7 @@ const getMultipleRs = async (req, res) => {
         });
         html += `</div>`;
 
-        cache.setKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`, html);
+        cache.setKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}_${header}`, html);
 
         res.json({
             html,
