@@ -320,6 +320,7 @@ const getMultipleRs = async (req, res) => {
                             })
                             .join("")}                    
                     </div>
+                    <button class="btn btn-danger view-more-lotop">Xem tất cả</button>
                 </div>
             `;
         });
