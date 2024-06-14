@@ -242,7 +242,7 @@ const autoNumber = async (req, res) => {
 };
 
 const getMultipleRs = async (req, res) => {
-    const { domain, rows, cvHtml } = req.query;
+    const { domain, rows, cvHtml, header } = req.query;
 
     const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
 
@@ -292,7 +292,7 @@ const getMultipleRs = async (req, res) => {
             html += `
                 <div class="lotop-box">
                     <div class="lotop-box-header">
-                        Bảng lô top ngày ${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}
+                        ${header.replaceAll('{{date}}', `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`)}
                     </div>
                     <div class="lotop-box-numbers">
                         ${numbers
