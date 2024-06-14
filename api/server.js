@@ -116,6 +116,7 @@ app.get("/api/autoGenNumbers", authenticateToken, SoHangNgayService.autoGenNumbe
 app.get("/api/checkResult", authenticateToken, SoHangNgayService.checkResult);
 app.get("/api/soHangNgay", SoHangNgayService.autoNumber);
 app.get("/api/loTop/soHangNgay", LoTopService.autoNumber);
+app.get("/api/loTop/getMultipleRs", LoTopService.getMultipleRs);
 app.get("/api/loTop/checkResult", LoTopService.checkResult);
 
 app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbers);

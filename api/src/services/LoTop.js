@@ -241,8 +241,103 @@ const autoNumber = async (req, res) => {
     }
 };
 
+const getMultipleRs = async (req, res) => {
+    const { domain, rows, cvHtml } = req.query;
+
+    const domainObj = (await DomainModel.findOne({ name: domain }))?.toObject();
+
+    if (cache.isExist(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`)) {
+        res.json({
+            html: cache.getKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`)
+        });
+        return;
+    }
+
+    if (!domainObj) {
+        res.status(404).json({
+            msg: "Provide domain"
+        });
+        return;
+    }
+
+    const loTops = await LoTopModel.find({
+        domainId: domainObj._id.toString(),
+    }).sort({
+        createdAt: -1,
+    }).limit(+rows || 30);
+
+    if (loTops.length === 0) {
+        res.status(404).json({
+            msg: "Not found result",
+        });
+        return;
+    }
+
+    if (+cvHtml) {
+        let html = `<div class="loTops">`;
+
+        loTops.forEach((loTop) => {
+            const numbers = loTop.toObject().numbers;
+            const isWaiting = loTop.toObject().isWaiting;
+            const date = new Date(loTop.toObject().createdAt);
+
+            const [d, m, y] = (() => {
+                return [
+                    date.getDate().toString(),
+                    (date.getMonth() + 1).toString(),
+                    date.getFullYear(),
+                ]
+            })()
+
+            html += `
+                <div class="lotop-box">
+                    <div class="lotop-box-header">
+                        Bảng lô top ngày ${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}
+                    </div>
+                    <div class="lotop-box-numbers">
+                        ${numbers
+                            .map(({ number, win, times }, index) => {
+                                let fontSize = '';
+
+                                if (index === 0) {
+                                    fontSize = 34 + 'px';
+                                } else if (index > 0 && index <= 10) {
+                                    fontSize = (33 - index * 0.2) + 'px';
+                                } else if (index > 10 && index <= 20) {
+                                    fontSize = (32 - index * 0.2) + 'px';
+                                } else if (index > 20 && index <= 30) {
+                                    fontSize = (31 - index * 0.2) + 'px';
+                                } else {
+                                    fontSize = (30 - index * 0.15) + 'px';
+                                }
+
+                                return `
+                                    <div style="margin-right: 5px; font-size: ${fontSize}; ${index > 30 ? "display: none;" : ""}" class="${isWaiting ? "waiting" : ""} ${win ? "win" : "lose"}">
+                                        ${number}
+                                        ${win ? `<span>${times}</span>` : ""}
+                                    </div>
+                                `;
+                            })
+                            .join("")}                    
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+
+        cache.setKey(`LO_TOP_MULTIPLE_${domain}_${rows}_${+cvHtml}`, html);
+
+        res.json({
+            html,
+        })
+    } else {
+        res.json(loTops);
+    }
+}
+
 module.exports = {
     autoGenNumbers,
     checkResult,
     autoNumber,
+    getMultipleRs,
 };
