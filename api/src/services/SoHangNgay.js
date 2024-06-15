@@ -260,17 +260,13 @@ const autoNumber = async (req, res) => {
                             let ngay;
 
                             if (loaiSoiCauObj.numberOfDays === 1) {
-                                ngay = `${d.getDate()}-${
-                                    d.getMonth() + 1
-                                }-${d.getFullYear()}`;
+                                ngay = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
                             } else {
                                 const endDate = new Date();
 
                                 endDate.setDate(d.getDate() + (loaiSoiCauObj.numberOfDays - 1));
 
-                                ngay = `${d.getDate()} → ${endDate.getDate()}-${
-                                    d.getMonth() + 1
-                                }-${d.getFullYear()}`;
+                                ngay = `${d.getDate()} → ${endDate.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
                             }
 
                             let rsHtml = "";
@@ -280,24 +276,14 @@ const autoNumber = async (req, res) => {
                                     const rs = sHangNgay.result[0];
 
                                     if (rs.length === 0) {
-                                        rsHtml =
-                                            '<span class="truot">Trượt</span>';
+                                        rsHtml = '<span class="truot">Trượt</span>';
                                     } else {
-                                        rsHtml =
-                                            "Ăn " +
-                                            rs
-                                                .map((e) => {
-                                                    if (
-                                                        e?.type ===
-                                                        PRIZE.DE
-                                                    ) {
+                                        rsHtml = "Ăn " + rs.map((e) => {
+                                                    if (e?.type === PRIZE.DE) {
                                                         return `<span class="number_return de">đề ${e.number}</span>`;
                                                     }
 
-                                                    if (
-                                                        e?.type ===
-                                                        PRIZE.BA_CANG
-                                                    ) {
+                                                    if (e?.type === PRIZE.BA_CANG) {
                                                         return `<span class="number_return ba_cang">ba càng ${e.number}</span>`;
                                                     }
 
@@ -323,42 +309,21 @@ const autoNumber = async (req, res) => {
                                             }
 
                                             return `
-                                            <div class="ket-qua-ngay ket-qua-ngay-${
-                                                i + 1
-                                            }">
+                                            <div class="ket-qua-ngay ket-qua-ngay-${i + 1}">
                                                 Ngày ${i + 1}: ${
                                                 e.length === 0
                                                     ? '<span class="truot">Trượt</span>'
-                                                    : e.map(() => {
-                                                        return (
-                                                            "Ăn " +
-                                                            e
-                                                                .map(
-                                                                    (
-                                                                        rsByDay
-                                                                    ) => {
-                                                                        if (
-                                                                            rsByDay?.type ===
-                                                                            PRIZE.DE
-                                                                        ) {
-                                                                            return `<span class="number_return de">đề ${rsByDay.number}</span>`;
-                                                                        }
+                                                    : "Ăn " + e.map((rsByDay) => {
+                                                        if (rsByDay?.type === PRIZE.DE) {
+                                                            return `<span class="number_return de">đề ${rsByDay.number}</span>`;
+                                                        }
 
-                                                                        if (
-                                                                            rsByDay?.type ===
-                                                                            PRIZE.BA_CANG
-                                                                        ) {
-                                                                            return `<span class="number_return ba_cang">ba càng ${rsByDay.number}</span>`;
-                                                                        }
+                                                        if (rsByDay?.type === PRIZE.BA_CANG) {
+                                                            return `<span class="number_return ba_cang">ba càng ${rsByDay.number}</span>`;
+                                                        }
 
-                                                                        return `<span class="number_return">${rsByDay.number}</span> <span class="number_times">${rsByDay.times}</span> nháy`;
-                                                                    }
-                                                                )
-                                                                .join(
-                                                                    ", "
-                                                                )
-                                                        );
-                                                    })
+                                                        return `<span class="number_return">${rsByDay.number}</span> <span class="number_times">${rsByDay.times}</span> nháy`;
+                                                    }).join(", ")
                                             }
                                             </div>
                                         `;
