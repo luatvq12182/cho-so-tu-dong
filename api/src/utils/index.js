@@ -89,7 +89,7 @@ const genHtmlValue = (soCho, isSpecial) => {
     } else {
         if (soCho.win) {
             return `
-                <span class="win-number">${soCho.number}<span class="times">${soCho.times}</span></span>
+                <span class="win-number">${soCho.number}${soCho.times ? `<span class="times">${soCho.times}</span>` : ''}</span>
             `;
         } else {
             return `
