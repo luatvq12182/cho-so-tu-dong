@@ -175,9 +175,11 @@ const autoGenNumbers = async (_req, res) => {
         }
     }
 
-    res.json({
-        msg: "OK",
-    });
+    if (res) {
+        res.json({
+            msg: "OK",
+        });
+    }
 };
 
 const getSoiCauHangNgay = async (req, res) => {
