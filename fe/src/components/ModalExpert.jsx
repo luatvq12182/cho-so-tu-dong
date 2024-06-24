@@ -279,6 +279,9 @@ const ModalExpert = ({ open, toggle, data, onSubmit }) => {
                         type="select"
                         multiple
                         value={formData.sites}
+                        style={{
+                            height: 200
+                        }}
                         onChange={(e) => {
                             const options = e.target.options;
                             let selected = [];
