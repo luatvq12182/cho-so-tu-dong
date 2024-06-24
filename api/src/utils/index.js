@@ -99,4 +99,12 @@ const genHtmlValue = (soCho, isSpecial) => {
     }
 };
 
-module.exports = { randomNumber, genHtmlValue };
+const sleep = (ms) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    })
+}
+
+module.exports = { randomNumber, genHtmlValue, sleep };

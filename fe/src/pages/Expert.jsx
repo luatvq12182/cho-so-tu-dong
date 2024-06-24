@@ -164,6 +164,20 @@ const Expert = () => {
                             </thead>
                             <tbody>
                                 {experts.map((expert, i) => {
+                                    let winRateAvg;
+
+                                    if (expert.metadata?.winRate) {
+                                        const winRate = Object.values(
+                                            expert.metadata?.winRate
+                                        );
+
+                                        winRateAvg = (
+                                            winRate.reduce((pre, cr) => {
+                                                return pre + cr;
+                                            }, 0) / winRate.length
+                                        ).toFixed(2);
+                                    }
+
                                     return (
                                         <tr key={expert._id}>
                                             <td>{i + 1}</td>
@@ -220,7 +234,8 @@ const Expert = () => {
                                             </td>
                                             <td>
                                                 <div>
-                                                    <b>38%</b> (Trung bình)
+                                                    <b>{winRateAvg || 0}%</b>{" "}
+                                                    (Trung bình)
                                                 </div>
                                                 {!viewDetailWinningRate[
                                                     expert._id
@@ -256,22 +271,32 @@ const Expert = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    rongbachkim888.vip
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    76%
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    nuoilokhung247.win
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    42%
-                                                                </td>
-                                                            </tr>
+                                                            {Object.keys(
+                                                                expert.metadata
+                                                                    ?.winRate ||
+                                                                    {}
+                                                            ).map((e) => {
+                                                                const winRate =
+                                                                    expert.metadata?.winRate[
+                                                                        e
+                                                                    ].toFixed(
+                                                                        2
+                                                                    );
+
+                                                                return (
+                                                                    <tr key={e}>
+                                                                        <td>
+                                                                            {e}
+                                                                        </td>
+                                                                        <td className="text-center">
+                                                                            {
+                                                                                winRate
+                                                                            }
+                                                                            %
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
                                                         </tbody>
                                                     </Table>
                                                 )}

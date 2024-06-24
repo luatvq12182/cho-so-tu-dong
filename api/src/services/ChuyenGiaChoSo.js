@@ -3,7 +3,8 @@ const logger = require("../configs/logger");
 const ExpertService = require("./Expert");
 const DomainService = require("./Domain");
 const ChuyenGiaChoSoModel = require("../models/ChuyenGiaChoSo");
-const { randomNumber } = require("../utils");
+const ExpertModel = require("../models/Expert");
+const { randomNumber, sleep } = require("../utils");
 const { CHECK_TYPE } = require("../constants");
 
 const checkExist = async (expertId, domainId, date) => {
@@ -75,9 +76,14 @@ const calWinningRate = async (expertId, domainId) => {
         expertId,
         domainId,
     });
+    let expert = await ExpertService.getExpert(expertId);
+    let domain = await DomainService.getDomain(domainId);
+
+    if (!expert || !domain) {
+        return;
+    }
 
     if (find) {
-        // const giveNumbers = find.toObject().giveNumbers;
         let win = 0;
         let total = 0;
 
@@ -95,7 +101,30 @@ const calWinningRate = async (expertId, domainId) => {
             });
         }
 
-        console.log(`SITE: ${domainId}`, (win / total) * 100);
+        expert = expert.toObject();
+        domain = domain.toObject();
+
+        await ExpertModel.findByIdAndUpdate(
+            expert._id.toString(),
+            {
+                ...expert,
+                metadata: {
+                    ...(expert.metadata || {}),
+                    winRate: {
+                        ...(expert?.metadata?.winRate || {}),
+                        [domain.name]: (win / total) * 100,
+                    },
+                },
+            },
+            {
+                new: true,
+            }
+        );
+
+        console.log(
+            `Expert: ${expert.name} - Site: ${domain.name}`,
+            (win / total) * 100 + "%"
+        );
     }
 };
 
@@ -303,7 +332,7 @@ const autoGenNumbers = async () => {
                     const today = new Date();
                     today.setHours(1, 0, 0, 0);
 
-                    for (let n = 0; n < 180; n++) {
+                    for (let n = 0; n < 60; n++) {
                         today.setDate(today.getDate() - 1);
 
                         await genNumberExpert(expert, domain.toObject(), today);
@@ -331,7 +360,7 @@ const checkResult = async () => {
 
                 const checkDate = new Date();
 
-                for (let d = 0; d < 180; d++) {
+                for (let d = 0; d < 60; d++) {
                     console.log(
                         " ----------------------- ",
                         checkDate.toISOString(),
@@ -344,7 +373,11 @@ const checkResult = async () => {
                         sites[s],
                         checkDate
                     );
+
+                    await sleep(500);
                 }
+
+                console.log(`Check Done ${expert.toObject().name}:${site}`);
             }
         }
     } catch (error) {
