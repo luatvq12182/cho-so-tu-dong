@@ -13,6 +13,7 @@ services:
       - xs-network
     volumes:
       - ./logs:/app/logs      
+      - ./uploads:/app/uploads
 
 networks:
   xs-network:
