@@ -8,33 +8,34 @@ const Schema = mongoose.Schema;
  * result: Trúng (x2)
  */
 
-const loTopSchema = new Schema(
+const expertSchema = new Schema(
     {
-        domainId: {
+        name: {
             type: String,
             default: "",
         },
-        /**
-         * {
-         *     number: '00',
-         *     win: true | false
-         *     times: 1
-         * }
-         */
-        numbers: {
+        avatar: {
+            type: String,
+            default: "",
+        },
+        sites: {
             type: Array,
             default: [],
         },
-        isWaiting: {
-            type: Boolean,
-            default: true,
+        soicau: {
+            type: Array,
+            default: [],
         },
+        metadata: {
+            type: Object,
+            default: {},
+        }
     },
     {
         timestamps: true,
     }
 );
 
-const LoTop = mongoose.model("LoTop", loTopSchema);
+const Expert = mongoose.model("Expert", expertSchema);
 
-module.exports = LoTop;
+module.exports = Expert;

@@ -19,9 +19,26 @@ const NUMBER_TYPE_LABELS = {
     5: "Cặp số đảo",
 };
 
+const CHECK_TYPE_LABELS = {
+    1: "Lô",
+    2: "Lô Đầu",
+    3: "Lô Đuôi",
+    4: "3 Càng Lô",
+    5: "Đề",
+    6: "Đề Đầu",
+    7: "Đề Đuôi",
+    8: "3 Càng Đề",
+};
+
 const PRIZE_LABELS = {
     1: "Lô",
     2: "Đề",
 };
 
-export { NUMBER_TYPE, PRIZE, NUMBER_TYPE_LABELS, PRIZE_LABELS };
+export {
+    NUMBER_TYPE,
+    PRIZE,
+    CHECK_TYPE_LABELS,
+    NUMBER_TYPE_LABELS,
+    PRIZE_LABELS,
+};

@@ -6,6 +6,12 @@ const getDomains = async () => {
     return domains;
 };
 
+const getDomain = async (id) => {
+    const domain = await DomainModel.findById(id);
+
+    return domain;
+};
+
 const createDomain = async (data) => {
     const newObj = new DomainModel(data);
 
@@ -24,6 +30,7 @@ const deleteDomain = async (id) => {
 
 module.exports = {
     getDomains,
+    getDomain,
     createDomain,
     updateDomain,
     deleteDomain,

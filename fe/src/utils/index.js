@@ -67,4 +67,13 @@ const randomNumber = (numberType, quantity) => {
     }
 };
 
-export { randomNumber };
+const generateRandomId = () => {
+    return (
+        "id-" +
+        Math.random().toString(36).substr(2, 9) +
+        "-" +
+        Date.now().toString(36)
+    );
+};
+
+export { randomNumber, generateRandomId };

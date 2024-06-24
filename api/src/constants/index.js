@@ -138,6 +138,17 @@ const LICH_QUAY_THUONG = {
     },
 };
 
+const CHECK_TYPE = {
+    LO: 1,
+    LO_DAU: 2,
+    LO_DUOI: 3,
+    "3_CANG_LO": 4,
+    DE: 5,
+    DE_DAU: 6,
+    DE_DUOI: 7,
+    "3_CANG_DE": 8,
+};
+
 module.exports = {
     NUMBER_TYPE,
     PRIZE,
@@ -146,4 +157,5 @@ module.exports = {
     ONE_DAY,
     DOMAINS,
     LICH_QUAY_THUONG,
+    CHECK_TYPE,
 };

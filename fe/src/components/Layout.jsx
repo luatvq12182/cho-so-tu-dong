@@ -48,14 +48,14 @@ const Layout = () => {
                         Loại soi cầu
                     </NavLink>
                 </NavItem>
-                {/* <NavItem>
-                    <NavLink className="nav-link" to="/cho-so-hang-ngay">
-                        Cho số hàng ngày
+                <NavItem>
+                    <NavLink className="nav-link text-white" to="/chuyen-gia">
+                        Chuyên gia
                     </NavLink>
-                </NavItem> */}
+                </NavItem>
             </Nav>
 
-            <Container className="mt-4">
+            <Container fluid className="mt-4">
                 <Row>
                     <Outlet />
                 </Row>

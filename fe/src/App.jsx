@@ -6,6 +6,7 @@ import ChoSoHangNgay from "./pages/ChoSoHangNgay";
 import SignIn from "./pages/SignIn";
 import LogFiles from "./pages/LogFiles";
 import LogFileContent from "./pages/LogFileContent";
+import Expert from "./pages/Expert";
 
 const router = createBrowserRouter([
     {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             {
                 path: "domains",
                 element: <Domain />,
+            },
+            {
+                path: "chuyen-gia",
+                element: <Expert />,
             },
             {
                 path: "cho-so-hang-ngay",

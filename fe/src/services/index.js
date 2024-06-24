@@ -63,6 +63,22 @@ const getLogFileContent = (fileName) => {
     return httpClient.get('/api/logs/' + fileName);
 }
 
+const getExperts = () => {
+    return httpClient.get("/api/experts");
+};
+
+const createExpert = (payload) => {
+    return httpClient.post("/api/experts", payload);
+};
+
+const updateExpert = (payload) => {
+    return httpClient.put("/api/experts", payload);
+};
+
+const deleteExpert = (id) => {
+    return httpClient.delete("/api/experts/" + id);
+};
+
 export {
     signIn,
     verifyToken,
@@ -77,4 +93,8 @@ export {
     autoGenNumbers,
     getLogFiles,
     getLogFileContent,
+    getExperts,
+    createExpert,
+    updateExpert,
+    deleteExpert,    
 };

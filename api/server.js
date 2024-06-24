@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
+const multer = require("multer");
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
@@ -9,10 +10,27 @@ require("./schedule");
 const logger = require("./src/configs/logger");
 const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
+const ExpertController = require('./src/controllers/Expert');
 const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require('./src/services/LoTop');
 const SoiCauHangNgayService = require('./src/services/SoiCauHangNgay');
+const ChuyenGiaChoSoService = require('./src/services/ChuyenGiaChoSo');
 const { cache } = require("./src/configs/cache");
+
+// Cấu hình Multer cho việc lưu trữ file
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // Thư mục lưu file
+    },
+    filename: function (req, file, cb) {
+        cb(
+            null,
+            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        ); // Tên file
+    },
+});
+
+const upload = multer({ storage: storage });
 
 process.on("uncaughtException", (error) => {
     logger.error(error.stack);
@@ -29,17 +47,13 @@ app.use(
         limit: "40mb",
     })
 );
-
-app.get("/api/hello-world", (_req, res) => {
-    res.json({
-        msg: "Hello world",
-    });
-});
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 app.listen(process.env.PORT, () => {
     console.log("Server is running on port: ", process.env.PORT);
 
-    logger.info('STARTING SERVER')
+    logger.info('STARTING SERVER');
 });
 
 app.post("/api/sign-in", (req, res) => {
@@ -66,7 +80,6 @@ app.post("/api/sign-in", (req, res) => {
 
     res.json({ token });
 });
-
 app.post("/api/verify-token", (req, res) => {
     const token = req.headers["authorization"];
 
@@ -122,6 +135,13 @@ app.get("/api/loTop/checkResult", LoTopService.checkResult);
 app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbers);
 app.get("/api/soiCauHangNgay/soHangNgay", SoiCauHangNgayService.getSoiCauHangNgay);
 
+app.get("/api/experts", ExpertController.getExperts);
+app.get("/api/experts/:id", ExpertController.getExpert);
+app.post("/api/experts", upload.single('avatar'), ExpertController.createExpert);
+app.put("/api/experts", upload.single('avatar'), ExpertController.updateExpert);
+app.post("/api/experts/delete-multiple", ExpertController.deleteExperts);
+app.delete("/api/experts/:id", ExpertController.deleteExpert);
+ 
 app.get("/api/cache/keys", (_req, res) => {
     const keys = cache.getKeys();
 
@@ -132,7 +152,6 @@ app.get("/api/cache/reset", authenticateToken, (_req, res) => {
 
     res.json('OK');
 });
-
 app.get("/api/logs", authenticateToken, (_req, res) => {
     const logDirectory = path.join(__dirname, 'logs');
 
@@ -145,7 +164,6 @@ app.get("/api/logs", authenticateToken, (_req, res) => {
         res.json(logFiles);
     });    
 });
-
 app.get('/api/logs/:fileName', authenticateToken, (req, res) => {
     const { fileName } = req.params;
     const logFilePath = path.join(__dirname, 'logs', fileName);
