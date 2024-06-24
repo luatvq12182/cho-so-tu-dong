@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import classNames from "classNames";
+import classNames from "classnames";
 
 const SelectFile = (props) => {
     const [previewSrc, setPreviewSrc] = useState(props.src || "");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import classNames from "classNames";
+import classNames from "classnames";
 import { Button, Input } from "reactstrap";
 import { generateRandomId } from "../utils";
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import classNames from "classNames";
+import classNames from "classnames";
 import {
     Button,
     FormGroup,
