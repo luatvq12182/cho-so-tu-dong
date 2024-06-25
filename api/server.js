@@ -135,13 +135,13 @@ app.get("/api/loTop/checkResult", LoTopService.checkResult);
 app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbers);
 app.get("/api/soiCauHangNgay/soHangNgay", SoiCauHangNgayService.getSoiCauHangNgay);
 
-app.get("/api/experts", ExpertController.getExperts);
-app.get("/api/experts/soHangNgay", ExpertController.soHangNgay);
-app.get("/api/experts/:id", ExpertController.getExpert);
-app.post("/api/experts", upload.single('avatar'), ExpertController.createExpert);
-app.put("/api/experts", upload.single('avatar'), ExpertController.updateExpert);
-app.post("/api/experts/delete-multiple", ExpertController.deleteExperts);
-app.delete("/api/experts/:id", ExpertController.deleteExpert);
+app.get("/api/experts", authenticateToken, ExpertController.getExperts);
+app.get("/api/experts/soHangNgay", authenticateToken, ExpertController.soHangNgay);
+app.get("/api/experts/:id", authenticateToken, ExpertController.getExpert);
+app.post("/api/experts", upload.single('avatar'), authenticateToken, ExpertController.createExpert);
+app.put("/api/experts", upload.single('avatar'), authenticateToken, ExpertController.updateExpert);
+app.post("/api/experts/delete-multiple", authenticateToken, ExpertController.deleteExperts);
+app.delete("/api/experts/:id", authenticateToken, ExpertController.deleteExpert);
  
 app.get("/api/cache/keys", (_req, res) => {
     const keys = cache.getKeys();
