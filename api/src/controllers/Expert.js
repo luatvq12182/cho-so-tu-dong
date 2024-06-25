@@ -1,5 +1,6 @@
 const logger = require("../configs/logger");
 const ExpertService = require("../services/Expert");
+const ChuyenGiaChoSoService = require("../services/ChuyenGiaChoSo");
 
 const getExperts = async (_req, res) => {
     try {
@@ -39,7 +40,7 @@ const createExpert = async (req, res) => {
             soicau: JSON.parse(payload.soicau),
         });
 
-        logger.info('CREATE Expert: ' + JSON.stringify(req.body));
+        logger.info("CREATE Expert: " + JSON.stringify(req.body));
 
         res.status(201).json(expert);
     } catch (error) {
@@ -62,7 +63,7 @@ const updateExpert = async (req, res) => {
             soicau: JSON.parse(payload.soicau),
         });
 
-        logger.info('UPDATE Expert: ' + JSON.stringify(req.body));
+        logger.info("UPDATE Expert: " + JSON.stringify(req.body));
 
         res.status(200).json("OK");
     } catch (error) {
@@ -88,9 +89,30 @@ const deleteExpert = async (req, res) => {
     try {
         await ExpertService.deleteExpert(req.params.id);
 
-        logger.info('DELETE Expert: ' + req.params.id);
+        logger.info("DELETE Expert: " + req.params.id);
 
         res.json("OK");
+    } catch (error) {
+        logger.error(error.stack);
+        res.status(400).json({
+            msg: "Bad Request",
+        });
+    }
+};
+
+const soHangNgay = async (req, res) => {
+    try {
+        const { site, cvHtml } = req.query;
+
+        const data = await ChuyenGiaChoSoService.autoNumber(site, cvHtml);
+
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404).json({
+                msg: "Not found",
+            });
+        }
     } catch (error) {
         logger.error(error.stack);
         res.status(400).json({
@@ -106,4 +128,5 @@ module.exports = {
     updateExpert,
     deleteExpert,
     deleteExperts,
+    soHangNgay,
 };

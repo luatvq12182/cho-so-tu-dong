@@ -14,7 +14,7 @@ const ExpertController = require('./src/controllers/Expert');
 const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require('./src/services/LoTop');
 const SoiCauHangNgayService = require('./src/services/SoiCauHangNgay');
-const ChuyenGiaChoSoService = require('./src/services/ChuyenGiaChoSo');
+// const ChuyenGiaChoSoService = require('./src/services/ChuyenGiaChoSo');
 const { cache } = require("./src/configs/cache");
 
 // Cấu hình Multer cho việc lưu trữ file
@@ -136,6 +136,7 @@ app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbe
 app.get("/api/soiCauHangNgay/soHangNgay", SoiCauHangNgayService.getSoiCauHangNgay);
 
 app.get("/api/experts", ExpertController.getExperts);
+app.get("/api/experts/soHangNgay", ExpertController.soHangNgay);
 app.get("/api/experts/:id", ExpertController.getExpert);
 app.post("/api/experts", upload.single('avatar'), ExpertController.createExpert);
 app.put("/api/experts", upload.single('avatar'), ExpertController.updateExpert);
@@ -187,3 +188,7 @@ app.get('/api/logs/:fileName', authenticateToken, (req, res) => {
         res.json(logLines);
     });
 });
+
+// ChuyenGiaChoSoService.checkResult();
+// ChuyenGiaChoSoService.autoGenNumbers();
+// ChuyenGiaChoSoService.updateWinningRate();

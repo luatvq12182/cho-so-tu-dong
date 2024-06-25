@@ -3,6 +3,7 @@ const logger = require("../configs/logger");
 const ExpertService = require("./Expert");
 const DomainService = require("./Domain");
 const ChuyenGiaChoSoModel = require("../models/ChuyenGiaChoSo");
+const DomainModel = require("../models/Domain");
 const ExpertModel = require("../models/Expert");
 const { randomNumber, sleep } = require("../utils");
 const { CHECK_TYPE } = require("../constants");
@@ -332,11 +333,12 @@ const autoGenNumbers = async () => {
                     const today = new Date();
                     today.setHours(1, 0, 0, 0);
 
-                    for (let n = 0; n < 60; n++) {
-                        today.setDate(today.getDate() - 1);
+                    await genNumberExpert(expert, domain.toObject(), today);
+                    // for (let n = 0; n < 60; n++) {
+                    //     today.setDate(today.getDate() - 1);
 
-                        await genNumberExpert(expert, domain.toObject(), today);
-                    }
+                    //     await genNumberExpert(expert, domain.toObject(), today);
+                    // }
                 } catch (error) {
                     logger.error(error.stack);
                 }
@@ -351,6 +353,8 @@ const checkResult = async () => {
     try {
         const experts = await ExpertService.getExperts();
 
+        logger.info('START CHECK RS CHUYEN GIA CHO SO');
+
         for (let e = 0; e < experts.length; e++) {
             const expert = experts[e];
             const sites = expert.sites;
@@ -360,26 +364,36 @@ const checkResult = async () => {
 
                 const checkDate = new Date();
 
-                for (let d = 0; d < 60; d++) {
-                    console.log(
-                        " ----------------------- ",
-                        checkDate.toISOString(),
-                        " ----------------------- "
-                    );
-                    checkDate.setDate(checkDate.getDate() - 1);
+                await checkRsByDate(
+                    expert.toObject()._id.toString(),
+                    site,
+                    checkDate
+                );
 
-                    await checkRsByDate(
-                        expert.toObject()._id.toString(),
-                        sites[s],
-                        checkDate
-                    );
+                await sleep(500);
 
-                    await sleep(500);
-                }
+                // for (let d = 0; d < 2; d++) {
+                //     console.log(
+                //         " ----------------------- ",
+                //         checkDate.toISOString(),
+                //         " ----------------------- "
+                //     );
+                //     checkDate.setDate(checkDate.getDate() - 1);
 
-                console.log(`Check Done ${expert.toObject().name}:${site}`);
+                //     await checkRsByDate(
+                //         expert.toObject()._id.toString(),
+                //         sites[s],
+                //         checkDate
+                //     );
+
+                //     await sleep(500);
+                // }
             }
         }
+
+        logger.info('DONE CHECK RS CHUYEN GIA CHO SO');
+
+        await updateWinningRate();
     } catch (error) {
         console.log(error);
     }
@@ -387,6 +401,8 @@ const checkResult = async () => {
 
 const updateWinningRate = async () => {
     try {
+        logger.info('START UPDATE WINNING RATE');
+
         const experts = await ExpertService.getExperts();
 
         for (let e = 0; e < experts.length; e++) {
@@ -399,8 +415,181 @@ const updateWinningRate = async () => {
                 await calWinningRate(expert.toObject()._id.toString(), site);
             }
         }
+
+        logger.info('DONE UPDATE WINNING RATE');
     } catch (error) {
         console.log(error);
+    }
+};
+
+const autoNumber = async (site, cvHtml) => {
+    const domain = await DomainModel.findOne({
+        name: site,
+    });
+
+    if (domain) {
+        const experts = await ExpertService.getExperts();
+        const siteExperts = experts.filter((e) => {
+            return e
+                .toObject()
+                .sites.includes(domain.toObject()._id.toString());
+        });
+
+        if (siteExperts.length > 0) {
+            const orderByWinRateExperts = siteExperts
+                .sort((a, b) => {
+                    return b.metadata.winRate[site] - a.metadata.winRate[site];
+                })
+                .slice(0, 10);
+
+            if (cvHtml) {
+                let html = "";
+
+                for (let e = 0; e < orderByWinRateExperts.length; e++) {
+                    const expert = orderByWinRateExperts[e].toObject();
+                    const startTime = new Date();
+                    startTime.setHours(0, 0, 0, 0);
+                    const endTime = new Date();
+                    endTime.setHours(23, 59, 59, 999);
+
+                    const chuyenGiaChoSo = await ChuyenGiaChoSoModel.findOne({
+                        expertId: expert._id.toString(),
+                        domainId: domain.toObject()._id.toString(),
+                        createdAt: {
+                            $gte: startTime,
+                            $lte: endTime,
+                        },
+                    });
+
+                    if (chuyenGiaChoSo) {
+                        const giveNumbers =
+                            chuyenGiaChoSo.toObject().giveNumbers;
+
+                        const lo = giveNumbers.filter(({ checkType }) => {
+                            return [
+                                CHECK_TYPE.LO,
+                                CHECK_TYPE.LO_DAU,
+                                CHECK_TYPE.LO_DUOI,
+                                CHECK_TYPE['3_CANG_LO'],
+                            ].includes(+checkType);
+                        });
+                        const dacbiet = giveNumbers.filter(({ checkType }) => {
+                            return [
+                                CHECK_TYPE.DE,
+                                CHECK_TYPE.DE_DAU,
+                                CHECK_TYPE.DE_DUOI,
+                                CHECK_TYPE['3_CANG_DE'],
+                            ].includes(+checkType);
+                        });
+
+                        html += `
+                            <div class="items" data-no-optimize="1">
+                                <div class="row disablerow">
+                                    <div
+                                        class="col-md-1 col-xs-1"
+                                        style="padding: 0px; text-align: left"
+                                    >
+                                        <div class="emoji">${e + 1}</div>
+                                    </div>
+                                    <div class="col-md-5 col-xs-5" style="display: inline-flex">
+                                        <div class="avatar">
+                                            <img
+                                                decoding="async"
+                                                src="https://chosotudong.apixoso.com/${
+                                                    expert.avatar
+                                                }"
+                                                width="40"
+                                                height="40"
+                                            />
+                                        </div>
+                                        <div class="name">
+                                            <div><strong>${
+                                                expert.name
+                                            }</strong></div>
+                                            <p><span class="color-green-pt">${
+                                                expert.metadata?.winRate?.[site]?.toFixed(2)
+                                            }%</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6 text-left" style="padding: 0">
+                                        <div>
+                                            <span class="color-blue"><span class="xanh-lo">🔵</span> Lô: </span>
+                                            ${lo.map((e) => {
+                                                if (e.checkType == CHECK_TYPE.LO) {
+                                                    return e.numbers.map(({ number }) => {
+                                                        return `<span class="ball-lo">${number}</span>`;
+                                                    }).join('');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE.LO_DAU) {
+                                                    return `Đầu ` + e.numbers.map(({ number }) => {
+                                                        return `<span class="dac-biet-dau">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE.LO_DUOI) {
+                                                    return `Đuôi ` + e.numbers.map(({ number }) => {
+                                                        return `<span class="dac-biet-duoi">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE['3_CANG_LO']) {
+                                                    return e.name + ' ' + e.numbers.map(({ number }) => {
+                                                        return `<span class="3-cang-lo">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                return '';
+                                            }).join('')}
+                                        </div>
+                                        <div class="color-green">
+                                            <span class="color-orange"><span class="do-de">🔴</span> Đặc biệt: </span>
+                                            ${dacbiet.map((e) => {
+                                                if (e.checkType == CHECK_TYPE.DE) {
+                                                    return e.numbers.map(({ number }) => {
+                                                        return `<span class="ball-de">${number}</span>`;
+                                                    }).join('');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE.DE_DAU) {
+                                                    return `Đầu ` + e.numbers.map(({ number }) => {
+                                                        return `<span class="dac-biet-dau">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE.DE_DUOI) {
+                                                    return `Đuôi ` + e.numbers.map(({ number }) => {
+                                                        return `<span class="dac-biet-duoi">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                if (e.checkType == CHECK_TYPE['3_CANG_DE']) {
+                                                    return e.name + ' ' + e.numbers.map(({ number }) => {
+                                                        return `<span class="3-cang-de">${number}</span>`;
+                                                    }).join(', ');
+                                                }
+
+                                                return '';
+                                            }).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                        `;
+                    }
+                }
+
+                return {
+                    html: html,
+                };
+            } else {
+                return [];
+            }
+        } else {
+            return null;
+        }
+    } else {
+        return null;
     }
 };
 
@@ -408,4 +597,5 @@ module.exports = {
     autoGenNumbers,
     checkResult,
     updateWinningRate,
+    autoNumber,
 };
