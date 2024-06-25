@@ -428,9 +428,9 @@ const autoNumber = async (site, cvHtml) => {
         name: site,
     });
 
-    if (cache.isExist(`CHUYEN_GIA_CHO_SO_${domain}`)) {
+    if (cache.isExist(`CHUYEN_GIA_CHO_SO_${site}`)) {
         return {
-            html: cache.getKey(`CHUYEN_GIA_CHO_SO_${domain}`),
+            html: cache.getKey(`CHUYEN_GIA_CHO_SO_${site}`),
         };
     }
 
@@ -586,7 +586,7 @@ const autoNumber = async (site, cvHtml) => {
                     }
                 }
 
-                cache.setKey(`CHUYEN_GIA_CHO_SO_${domain}`, html);
+                cache.setKey(`CHUYEN_GIA_CHO_SO_${site}`, html);
 
                 return {
                     html: html,
