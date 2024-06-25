@@ -24,10 +24,8 @@ const checkExist = async (expertId, domainId, date) => {
     });
 
     if (find) {
-        console.log("Created");
         return true;
     } else {
-        console.log("Not created yet");
         return false;
     }
 };
@@ -344,6 +342,8 @@ const autoGenNumbers = async () => {
                 }
             }
         }
+
+        logger.info('DONE ChuyenGiaChoSo.autoGenNumbers');
     } catch (error) {
         console.log("Error: ", error);
     }
