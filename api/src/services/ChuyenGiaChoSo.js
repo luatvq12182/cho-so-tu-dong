@@ -492,39 +492,32 @@ const autoNumber = async (site, cvHtml) => {
                         html += `
                             <div class="items" data-no-optimize="1">
                                 <div class="row disablerow">
-                                    <div
-                                        class="col-md-1 col-xs-1"
-                                        style="padding: 0px; text-align: left"
-                                    >
+                                    <div class="col-md-1 col-xs-1" style="padding: 0px; text-align: left">
                                         <div class="emoji">${e + 1}</div>
                                     </div>
                                     <div class="col-md-5 col-xs-5" style="display: inline-flex">
                                         <div class="avatar">
                                             <img
                                                 decoding="async"
-                                                src="https://chosotudong.apixoso.com/${
-                                                    expert.avatar
-                                                }"
+                                                src="https://chosotudong.apixoso.com/${expert.avatar}"
                                                 width="40"
                                                 height="40"
                                             />
                                         </div>
                                         <div class="name">
-                                            <div><strong>${
-                                                expert.name
-                                            }</strong></div>
-                                            <p><span class="color-green-pt">${
-                                                expert.metadata?.winRate?.[site]?.toFixed(2)
-                                            }%</span></p>
+                                            <div><strong>${expert.name}</strong></div>
+                                            <p>
+                                                <span class="color-green-pt">${expert.metadata?.winRate?.[site]?.toFixed(2)}%</span>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-xs-6 text-left" style="padding: 0">
-                                        <div>
+                                        <div class="container-lo">
                                             <span class="color-blue"><span class="xanh-lo">🔵</span> Lô: </span>
                                             ${lo.map((e) => {
                                                 if (e.checkType == CHECK_TYPE.LO) {
                                                     return e.numbers.map(({ number }) => {
-                                                        return `<span class="ball-lo">${number}</span>`;
+                                                        return `<span class="number">${number}</span>`;
                                                     }).join('');
                                                 }
 
@@ -549,12 +542,12 @@ const autoNumber = async (site, cvHtml) => {
                                                 return '';
                                             }).join('')}
                                         </div>
-                                        <div class="color-green">
+                                        <div class="container-de">
                                             <span class="color-orange"><span class="do-de">🔴</span> Đặc biệt: </span>
                                             ${dacbiet.map((e) => {
                                                 if (e.checkType == CHECK_TYPE.DE) {
                                                     return e.numbers.map(({ number }) => {
-                                                        return `<span class="ball-de">${number}</span>`;
+                                                        return `<span class="number">${number}</span>`;
                                                     }).join('');
                                                 }
 
