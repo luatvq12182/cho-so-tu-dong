@@ -5,6 +5,7 @@ const DomainService = require("./Domain");
 const ChuyenGiaChoSoModel = require("../models/ChuyenGiaChoSo");
 const DomainModel = require("../models/Domain");
 const ExpertModel = require("../models/Expert");
+const { cache } = require("../configs/cache");
 const { randomNumber, sleep } = require("../utils");
 const { CHECK_TYPE } = require("../constants");
 
@@ -427,6 +428,12 @@ const autoNumber = async (site, cvHtml) => {
         name: site,
     });
 
+    if (cache.isExist(`CHUYEN_GIA_CHO_SO_${domain}`)) {
+        return {
+            html: cache.getKey(`CHUYEN_GIA_CHO_SO_${domain}`),
+        };
+    }
+
     if (domain) {
         const experts = await ExpertService.getExperts();
         const siteExperts = experts.filter((e) => {
@@ -578,6 +585,8 @@ const autoNumber = async (site, cvHtml) => {
                         `;
                     }
                 }
+
+                cache.setKey(`CHUYEN_GIA_CHO_SO_${domain}`, html);
 
                 return {
                     html: html,
