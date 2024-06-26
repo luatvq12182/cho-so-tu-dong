@@ -516,26 +516,26 @@ const autoNumber = async (site, cvHtml) => {
                                             <span class="color-blue"><span class="xanh-lo">🔵</span> Lô: </span>
                                             ${lo.map((e) => {
                                                 if (e.checkType == CHECK_TYPE.LO) {
-                                                    return e.numbers.map(({ number }) => {
-                                                        return `<span class="number">${number}</span>`;
+                                                    return e.numbers.map(({ number, win, times }) => {
+                                                        return `<span class="number ${win ? 'win-number' : ''}">${number}${win ? `<span class="times">${times}</span>` : ``}</span>`;
                                                     }).join('');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE.LO_DAU) {
-                                                    return `Đầu ` + e.numbers.map(({ number }) => {
-                                                        return `<span class="dac-biet-dau">${number}</span>`;
+                                                    return `Đầu ` + e.numbers.map(({ number, win, returnNumbers }) => {
+                                                        return `<span class="dac-biet-dau ${win ? 'win-number' : ''}">${number}${win ? `(${returnNumbers.join(', ')})` : ''}</span>`;
                                                     }).join(', ');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE.LO_DUOI) {
-                                                    return `Đuôi ` + e.numbers.map(({ number }) => {
-                                                        return `<span class="dac-biet-duoi">${number}</span>`;
+                                                    return `Đuôi ` + e.numbers.map(({ number, win, returnNumbers }) => {
+                                                        return `<span class="dac-biet-duoi ${win ? 'win-number' : ''}">${number}${win ? `(${returnNumbers.join(', ')})` : ''}</span>`;
                                                     }).join(', ');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE['3_CANG_LO']) {
-                                                    return e.name + ' ' + e.numbers.map(({ number }) => {
-                                                        return `<span class="3-cang-lo">${number}</span>`;
+                                                    return e.name + ' ' + e.numbers.map(({ number, win }) => {
+                                                        return `<span class="3-cang-lo ${win ? 'win-number' : ''}">${number}</span>`;
                                                     }).join(', ');
                                                 }
 
@@ -546,26 +546,26 @@ const autoNumber = async (site, cvHtml) => {
                                             <span class="color-orange"><span class="do-de">🔴</span> Đặc biệt: </span>
                                             ${dacbiet.map((e) => {
                                                 if (e.checkType == CHECK_TYPE.DE) {
-                                                    return e.numbers.map(({ number }) => {
-                                                        return `<span class="number">${number}</span>`;
+                                                    return e.numbers.map(({ number, win }) => {
+                                                        return `<span class="number ${win ? 'win-number' : ''}">${number}</span>`;
                                                     }).join('');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE.DE_DAU) {
-                                                    return `Đầu ` + e.numbers.map(({ number }) => {
-                                                        return `<span class="dac-biet-dau">${number}</span>`;
+                                                    return `Đầu ` + e.numbers.map(({ number, win, returnNumber }) => {
+                                                        return `<span class="dac-biet-dau ${win ? 'win-number' : ''}">${number}${win ? `(${returnNumber})` : ''}</span>`;
                                                     }).join(', ');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE.DE_DUOI) {
-                                                    return `Đuôi ` + e.numbers.map(({ number }) => {
-                                                        return `<span class="dac-biet-duoi">${number}</span>`;
+                                                    return `Đuôi ` + e.numbers.map(({ number, win, returnNumber }) => {
+                                                        return `<span class="dac-biet-duoi ${win ? 'win-number' : ''}">${number}${win ? `(${returnNumber})` : ''}</span>`;
                                                     }).join(', ');
                                                 }
 
                                                 if (e.checkType == CHECK_TYPE['3_CANG_DE']) {
-                                                    return e.name + ' ' + e.numbers.map(({ number }) => {
-                                                        return `<span class="3-cang-de">${number}</span>`;
+                                                    return e.name + ' ' + e.numbers.map(({ number, win }) => {
+                                                        return `<span class="3-cang-de ${win ? 'win-number' : ''}">${number}</span>`;
                                                     }).join(', ');
                                                 }
 
