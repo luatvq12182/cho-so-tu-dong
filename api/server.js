@@ -136,7 +136,7 @@ app.get("/api/soiCauHangNgay/autoGenNumbers", SoiCauHangNgayService.autoGenNumbe
 app.get("/api/soiCauHangNgay/soHangNgay", SoiCauHangNgayService.getSoiCauHangNgay);
 
 app.get("/api/experts", authenticateToken, ExpertController.getExperts);
-app.get("/api/experts/soHangNgay", authenticateToken, ExpertController.soHangNgay);
+app.get("/api/experts/soHangNgay", ExpertController.soHangNgay);
 app.get("/api/experts/:id", authenticateToken, ExpertController.getExpert);
 app.post("/api/experts", upload.single('avatar'), authenticateToken, ExpertController.createExpert);
 app.put("/api/experts", upload.single('avatar'), authenticateToken, ExpertController.updateExpert);
