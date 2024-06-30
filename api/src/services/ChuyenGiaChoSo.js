@@ -543,7 +543,7 @@ const autoNumber = async (site, cvHtml) => {
                                             }).join('')}
                                         </div>
                                         <div class="container-de">
-                                            <span class="color-orange"><span class="do-de">🔴</span> Đặc biệt: </span>
+                                            <span class="color-orange"><span class="do-de">🔴</span> Đề: </span>
                                             ${dacbiet.map((e) => {
                                                 if (e.checkType == CHECK_TYPE.DE) {
                                                     return e.numbers.map(({ number, win }) => {
