@@ -1,11 +1,12 @@
 const axios = require("axios");
-const chalk = require("chalk");
+// const chalk = require("chalk");
 const SoHangNgayModel = require("../models/SoHangNgay");
 const LoaiSoiCauModel = require("../models/LoaiSoiCau");
 const DomainModel = require("../models/Domain");
 const { randomNumber } = require("../utils");
 const { cache } = require("../configs/cache");
 const { PRIZE, NUMBER_TYPE, ONE_DAY } = require("../constants");
+const logger = require("../configs/logger");
 
 const autoGenNumbers = async (_req, res) => {
     const loaiSoiCau = await LoaiSoiCauModel.find({});
@@ -15,35 +16,39 @@ const autoGenNumbers = async (_req, res) => {
         const lSoiCau = loaiSoiCau[i].toObject();
 
         for (let i = 0; i < domains.length; i++) {
-            const domain = domains[i].toObject();
+            try {
+                const domain = domains[i].toObject();
 
-            const today = new Date();
-            today.setDate(today.getDate() - (lSoiCau.numberOfDays - 1));
-            today.setHours(0, 0, 0, 0);
+                const today = new Date();
+                today.setDate(today.getDate() - (lSoiCau.numberOfDays - 1));
+                today.setHours(0, 0, 0, 0);
 
-            const obj = await SoHangNgayModel.find({
-                loaiSoiCauId: lSoiCau._id.toString(),
-                domainId: domain._id.toString(),
-                createdAt: { $gte: today },
-            });
-
-            if (obj.length > 0) {
-                // console.log(chalk.yellow("Đã tạo: ", lSoiCau.name));
-            } else {
-                const date = new Date();
-                // date.setDate(date.getDate() - 1);
-                date.setHours(1, 0, 0, 0);
-
-                const newObj = new SoHangNgayModel({
+                const obj = await SoHangNgayModel.find({
                     loaiSoiCauId: lSoiCau._id.toString(),
                     domainId: domain._id.toString(),
-                    number: randomNumber(lSoiCau.numberType, lSoiCau.quantity),
-                    result: [],
-                    createdAt: date,
+                    createdAt: { $gte: today },
                 });
 
-                await newObj.save();
-                console.log(chalk.green("Tạo mới dàn số cho: ", lSoiCau.name));
+                if (obj.length > 0) {
+                    // console.log(chalk.yellow("Đã tạo: ", lSoiCau.name));
+                } else {
+                    const date = new Date();
+                    // date.setDate(date.getDate() - 1);
+                    date.setHours(1, 0, 0, 0);
+
+                    const newObj = new SoHangNgayModel({
+                        loaiSoiCauId: lSoiCau._id.toString(),
+                        domainId: domain._id.toString(),
+                        number: randomNumber(lSoiCau.numberType, lSoiCau.quantity),
+                        result: [],
+                        createdAt: date,
+                    });
+
+                    await newObj.save();
+                    // console.log(chalk.green("Tạo mới dàn số cho: ", lSoiCau.name));
+                }
+            } catch (error) {
+                logger.error(error.stack);
             }
         }
     }
