@@ -149,6 +149,55 @@ const CHECK_TYPE = {
     "3_CANG_DE": 8,
 };
 
+const DAY_LABELS = {
+    0: "Chủ Nhật",
+    1: "Thứ 2",
+    2: "Thứ 3",
+    3: "Thứ 4",
+    4: "Thứ 5",
+    5: "Thứ 6",
+    6: "Thứ 7",
+};
+
+const PROVINCE_HREFS = {
+    Huế: "xstth-xo-so-hue",
+    "Phú Yên": "xspy-xo-so-phu-yen",
+    "Đắk Lắk": "xsdlk-xo-so-dak-lak",
+    "Quảng Nam": "xsqna-xo-so-quang-nam",
+    "Khánh Hòa": "xskh-xo-so-khanh-hoa",
+    "Đà Nẵng": "xsdna-xo-so-da-nang",
+    "Bình Định": "xsbdi-xo-so-binh-dinh",
+    "Quảng Bình": "xsqb-xo-so-quang-binh",
+    "Quảng Trị": "xsqt-xo-so-quang-tri",
+    "Ninh Thuận": "xsnt-xo-so-ninh-thuan",
+    "Gia Lai": "xsgl-xo-so-gia-lai",
+    "Quảng Ngãi": "xsqng-xo-so-quang-ngai",
+    "Đắk Nông": "xsdno-xo-so-dak-nong",
+    "Kon Tum": "xskt-xo-so-kon-tum",
+    "Vũng Tàu": "xsvt-xo-so-vung-tau",
+    "Cần Thơ": "xsct-xo-so-can-tho",
+    "Đồng Tháp": "xsdt-xo-so-dong-thap",
+    "TP.HCM": "xshcm-xo-so-tphcm",
+    "TPHCM": "xshcm-xo-so-tphcm",
+    "Cà Mau": "xscm-xo-so-ca-mau",
+    "Bến Tre": "xsbtr-xo-so-ben-tre",
+    "Bạc Liêu": "xsbl-xo-so-bac-lieu",
+    "Sóc Trăng": "xsst-xo-so-soc-trang",
+    "Đồng Nai": "xsdn-xo-so-dong-nai",
+    "An Giang": "xsag-xo-so-an-giang",
+    "Tây Ninh": "xstn-xo-so-tay-ninh",
+    "Bình Thuận": "xsbth-xo-so-binh-thuan",
+    "Vĩnh Long": "xsvl-xo-so-vinh-long",
+    "Bình Dương": "xsbd-xo-so-binh-duong",
+    "Trà Vinh": "xstv-xo-so-tra-vinh",
+    "Long An": "xsla-xo-so-long-an",
+    "Bình Phước": "xsbp-xo-so-binh-phuoc",
+    "Hậu Giang": "xshg-xo-so-hau-giang",
+    "Kiên Giang": "xskg-xo-so-kien-giang",
+    "Tiền Giang": "xstg-xo-so-tien-giang",
+    "Đà Lạt": "xsdl-xo-so-da-lat",
+}
+
 module.exports = {
     NUMBER_TYPE,
     PRIZE,
@@ -158,4 +207,6 @@ module.exports = {
     DOMAINS,
     LICH_QUAY_THUONG,
     CHECK_TYPE,
+    DAY_LABELS,
+    PROVINCE_HREFS,
 };

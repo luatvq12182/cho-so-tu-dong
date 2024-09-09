@@ -16,6 +16,7 @@ const LoTopService = require('./src/services/LoTop');
 const SoiCauHangNgayService = require('./src/services/SoiCauHangNgay');
 // const ChuyenGiaChoSoService = require('./src/services/ChuyenGiaChoSo');
 const { cache } = require("./src/configs/cache");
+const { taoBaiVietMienBac, taoBaiVietMienTrung, taoBaiVietMienNam } = require("./src/up-post-soicau/rongbachkim666.mobi");
 
 // Cấu hình Multer cho việc lưu trữ file
 const storage = multer.diskStorage({
@@ -188,7 +189,3 @@ app.get('/api/logs/:fileName', authenticateToken, (req, res) => {
         res.json(logLines);
     });
 });
-
-// ChuyenGiaChoSoService.checkResult();
-// ChuyenGiaChoSoService.autoGenNumbers();
-// ChuyenGiaChoSoService.updateWinningRate();
