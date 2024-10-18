@@ -53,6 +53,11 @@ const Layout = () => {
                         Chuyên gia
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink className="nav-link text-white" to="/user-truyen">
+                        User truyện
+                    </NavLink>
+                </NavItem>
             </Nav>
 
             <Container fluid className="mt-4">

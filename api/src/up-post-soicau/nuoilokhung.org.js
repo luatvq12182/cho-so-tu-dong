@@ -1,4 +1,8 @@
 /**
+ * STATUS: IN PROGRESS
+ */
+
+/**
  * /create-post-soi-cau
  *
  * post_title, post_content, post_type
@@ -10,8 +14,8 @@ const logger = require("../configs/logger");
 const { randomNumber } = require("../utils");
 const { NUMBER_TYPE, DAY_LABELS, LICH_QUAY_THUONG, PROVINCE_HREFS } = require("../constants");
 
-const DOMAIN = 'https://soicau888.org';
-const WP_TOKEN = '1cb3a18f6f411c9f07754536644c869822519a88634d3a7375742606ae88d0da';
+const DOMAIN = 'https://nuoilokhung.org';
+const WP_TOKEN = '90bffe1884b84d5e255f12ff0ecbd70f2edfc877b68d612dc6fb50638b3ac17c';
 
 const createPostAPI = async (payload) => {
     try {
@@ -25,9 +29,9 @@ const createPostAPI = async (payload) => {
             }
         );
 
-        logger.info(`soicau888.org ${payload.post_type} | Post created: ${JSON.stringify(res.data)}`);
+        logger.info(`nuoilokhung.org ${payload.post_type} | Post created: ${JSON.stringify(res.data)}`);
     } catch (error) {
-        logger.error(`soicau888.org ${payload.post_type} | Post fail: ${JSON.stringify(error.response.data)}`);
+        logger.error(`nuoilokhung.org ${payload.post_type} | Post fail: ${JSON.stringify(error.response.data)}`);
     }
 };
 

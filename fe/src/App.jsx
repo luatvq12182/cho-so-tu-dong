@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import LogFiles from "./pages/LogFiles";
 import LogFileContent from "./pages/LogFileContent";
 import Expert from "./pages/Expert";
+import UserTruyen from "./pages/UserTruyen";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: "domains",
                 element: <Domain />,
+            },
+            {
+                path: "user-truyen",
+                element: <UserTruyen />,
             },
             {
                 path: "chuyen-gia",

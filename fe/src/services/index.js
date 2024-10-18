@@ -35,6 +35,18 @@ const deleteDomain = (id) => {
     return httpClient.delete("/api/domains/" + id);
 };
 
+const getUserTruyens = () => {
+    return httpClient.get("/api/userTruyen");
+};
+
+const createUserTruyen = (payload) => {
+    return httpClient.post("/api/userTruyen", payload);
+};
+
+const deleteUserTruyen = (id) => {
+    return httpClient.delete("/api/userTruyen/" + id);
+};
+
 const getLoaiSoiCau = () => {
     return httpClient.get("/api/loaiSoiCau");
 };
@@ -86,6 +98,9 @@ export {
     createDomain,
     updateDomain,
     deleteDomain,
+    getUserTruyens,
+    createUserTruyen,
+    deleteUserTruyen,
     getLoaiSoiCau,
     createLoaiSoiCau,
     updateLoaiSoiCau,

@@ -10,13 +10,16 @@ require("./schedule");
 const logger = require("./src/configs/logger");
 const LoaiSoiCauController = require("./src/controllers/LoaiSoiCau");
 const DomainController = require("./src/controllers/Domain");
+const UserTruyenController = require("./src/controllers/UserTruyen");
 const ExpertController = require('./src/controllers/Expert');
 const SoHangNgayService = require("./src/services/SoHangNgay");
 const LoTopService = require('./src/services/LoTop');
 const SoiCauHangNgayService = require('./src/services/SoiCauHangNgay');
 // const ChuyenGiaChoSoService = require('./src/services/ChuyenGiaChoSo');
 const { cache } = require("./src/configs/cache");
-const { taoBaiVietMienBac, taoBaiVietMienTrung, taoBaiVietMienNam } = require("./src/up-post-soicau/rongbachkim666.mobi");
+// const SoiCau888Org = require("./src/up-post-soicau/soicau888.org");
+// const RBK666Mobi = require("./src/up-post-soicau/rongbachkim666.mobi");
+// const RBK888Org = require("./src/up-post-soicau/rongbachkim888.org");
 
 // Cấu hình Multer cho việc lưu trữ file
 const storage = multer.diskStorage({
@@ -126,6 +129,10 @@ app.post("/api/domains", authenticateToken, DomainController.createDomain);
 app.put("/api/domains", authenticateToken, DomainController.updateDomain);
 app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain);
 
+app.get("/api/userTruyen", authenticateToken, UserTruyenController.getUserTruyens);
+app.post("/api/userTruyen", authenticateToken, UserTruyenController.createUserTruyen);
+app.delete("/api/userTruyen/:id", authenticateToken, UserTruyenController.deleteUserTruyen);
+
 app.get("/api/autoGenNumbers", authenticateToken, SoHangNgayService.autoGenNumbers);
 app.get("/api/checkResult", authenticateToken, SoHangNgayService.checkResult);
 app.get("/api/soHangNgay", SoHangNgayService.autoNumber);
@@ -189,3 +196,15 @@ app.get('/api/logs/:fileName', authenticateToken, (req, res) => {
         res.json(logLines);
     });
 });
+
+// SoiCau888Org.taoBaiVietMienBac();
+// SoiCau888Org.taoBaiVietMienNam();
+// SoiCau888Org.taoBaiVietMienTrung();
+
+// RBK666Mobi.taoBaiVietMienBac();
+// RBK666Mobi.taoBaiVietMienNam();
+// RBK666Mobi.taoBaiVietMienTrung();
+
+// RBK888Org.taoBaiVietMienBac();
+// RBK888Org.taoBaiVietMienNam();
+// RBK888Org.taoBaiVietMienTrung();
