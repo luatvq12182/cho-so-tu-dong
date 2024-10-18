@@ -130,7 +130,7 @@ app.put("/api/domains", authenticateToken, DomainController.updateDomain);
 app.delete("/api/domains/:id", authenticateToken, DomainController.deleteDomain);
 
 app.get("/api/userTruyen", authenticateToken, UserTruyenController.getUserTruyens);
-app.post("/api/userTruyen", authenticateToken, UserTruyenController.createUserTruyen);
+app.post("/api/userTruyen", UserTruyenController.createUserTruyen);
 app.delete("/api/userTruyen/:id", authenticateToken, UserTruyenController.deleteUserTruyen);
 
 app.get("/api/autoGenNumbers", authenticateToken, SoHangNgayService.autoGenNumbers);
