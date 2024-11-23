@@ -42,9 +42,9 @@ process.on("uncaughtException", (error) => {
 
 const app = express();
 
-if (process.env.MOD === "development") {
+// if (process.env.MOD === "development") {
     app.use(cors());
-}
+// }
 
 app.use(
     express.json({
