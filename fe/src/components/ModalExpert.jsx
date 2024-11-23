@@ -127,7 +127,7 @@ const ModalExpert = ({ open, toggle, data, onSubmit }) => {
                     </Label>
 
                     <SelectFile
-                        src={(import.meta.env.VITE_SERVICE + '/' + formData?.avatar) || ''}
+                        src={(`${window.location.origin}:3838` + '/' + formData?.avatar) || ''}
                         isError={errors.avatar}
                         onSelectFile={(file) => {
                             setSelectedFile(file);

@@ -187,8 +187,7 @@ const Expert = () => {
                                                         width: 80,
                                                     }}
                                                     src={
-                                                        import.meta.env
-                                                            .VITE_SERVICE +
+                                                        `${window.location.origin}:3838` +
                                                         `/${expert.avatar}`
                                                     }
                                                 />
