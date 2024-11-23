@@ -3,8 +3,8 @@ import axios from "axios";
 const jwt_token = window.localStorage.getItem("jwt_token");
 
 const httpClient = axios.create({
-    // baseURL: import.meta.env.VITE_SERVICE,
-    baseURL: `${window.location.origin}:3838`,
+    baseURL: import.meta.env.VITE_SERVICE,
+    // baseURL: `${window.location.origin}:3838`,
     headers: jwt_token
         ? {
               Authorization: jwt_token,

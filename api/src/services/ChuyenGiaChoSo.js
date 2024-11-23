@@ -499,7 +499,7 @@ const autoNumber = async (site, cvHtml) => {
                                         <div class="avatar">
                                             <img
                                                 decoding="async"
-                                                src="https://chosotudong.apixoso.com:3838/${expert.avatar}"
+                                                src="https://chosotudong.apixoso.com/${expert.avatar}"
                                                 width="40"
                                                 height="40"
                                             />
